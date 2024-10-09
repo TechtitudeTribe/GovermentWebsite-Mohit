@@ -1,0 +1,68 @@
+#home-slideshow-1 > div > ul {
+      position: absolute;
+      left: 5%;
+      top: 80%;
+    }
+    #home-slideshow-1 .slide-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 25px;
+      text-align: center;
+      cursor: pointer;
+      margin: 5px;
+      transition: width 300ms;
+      background-color: #fff;
+    }
+    #home-slideshow-1 .slide-indicator.active {
+      width: 60px;
+      transition: width 300ms;
+    }
+    /*___________Sliding Text_______________*/
+    @keyframes slide {
+      /*from right to left*/
+      0% {
+        transform: translateX(100%);
+      }
+      50% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+    
+    @keyframes slide-reverse {
+      /* from left to right*/
+      0% {
+        transform: translateX(-100%);
+      }
+      50% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+    
+    .animate-slide {
+      animation: slide 30s linear infinite;
+    }
+    
+    .animate-slide-reverse {
+      animation: slide-reverse 30s linear infinite;
+    }
+
+    #home-slideshow-2 .slide-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 25px;
+      text-align: center;
+      cursor: pointer;
+      margin: 5px;
+      transition: width 300ms;
+      background-color: var(--color-secondary);
+    }
+    #home-slideshow-2 .slide-indicator.active {
+      width: 60px;
+      transition: width 300ms;
+    }  

@@ -1,0 +1,2 @@
+Doubts to ask : 
+1. Award section border color on cards.
