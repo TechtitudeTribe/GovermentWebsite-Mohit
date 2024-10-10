@@ -14,8 +14,8 @@ export default function AboutUs() {
             ऋग्वेदः - मण्डल ६ , सूक्तं ६.२८ , बार्हस्पत्यो भरद्वाज
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-12 items-center my-10">
-          <div className="tracking-widest text-gray-600 ">
+        <div className="flex flex-col-reverse  min-[950px]:grid grid-cols-2   gap-12 items-center my-10">
+          <div className="tracking-widest text-gray-600 mb-8 min-[950px]:mb-0">
             <p>
               Livestock rearing is common and an integral component of state
               agriculture supporting livelihood of more than two-thirds of the
@@ -47,7 +47,7 @@ export default function AboutUs() {
             </p>
           </div>
 
-          <div className=" corner-border ">
+          <div className=" corner-border">
             <div className="top-left"></div>
             <div className="bottom-right"></div>
             <div className="max-h-[350px] p-1 mb-1  text-center font-light text-lg  rounded-tr-[85px] rounded-bl-[85px] overflow-hidden">
@@ -63,17 +63,17 @@ export default function AboutUs() {
 
       <section className="p-6 min-[800px]:px-16">
         <div className="flex items-center gap-4 m-auto w-fit p-4">
-          <img src={leafsDesign} alt="leafs-design" className="h-14" />
-          <h2 className=" text-5xl font-light z-10 bg-white">
+          <img src={leafsDesign} alt="leafs-design" className="h-8  md:h-14" />
+          <h2 className=" text-2xl  lg:text-5xl font-light z-10 bg-white">
             Pre
             <span className="gradient-border after:bottom-1 ">cious Words</span>
           </h2>
-          <img src={leafsDesign} alt="leafs-design" className="h-14" />
+          <img src={leafsDesign} alt="leafs-design" className="h-8  md:h-14" />
         </div>
-        <div className="grid grid-cols-2 items-center  gap-4 min-[800px]:gap-10 my-6">
+        <div className="lg:grid grid-cols-2 items-center  gap-4 min-[800px]:gap-10 my-6">
           <div className=" corner-border max-w-[650px] max-h-[350px]">
             <div className="top-left -top-[15px] -left-[15px]"></div>
-            <div className="bottom-right z-10 bg-secondary text-white pl-8 pt-4  flex flex-col justify-center  h-[30%] w-[40%] ">
+            <div className="bottom-right z-10 bg-secondary text-white pl-8 pt-1  md:pt-4  flex flex-col justify-center h-auto   w-[70%]  md:w-[40%] ">
               <p className=""><span className="border-b-2 pb-1 border-white ">Perso</span>n Name</p>
               <p className=" mt-2 text-sm">Sed ut perspiciatis unde omnis iste natus error sit voluptatem </p>
             </div>
@@ -84,8 +84,8 @@ export default function AboutUs() {
               />
             
           </div>
-          <div className="font-light text-sm">
-            <p className="my-2">
+          <div className="font-light text-sm ">
+            <p className="my-4">
 
                 <img
                   src={startingQuotes}

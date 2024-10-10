@@ -51,7 +51,7 @@
   cursor: pointer;  
   background: var(--color-primary);   
   width: auto; 
-  width: 10rem;
+  width: 12rem;
   height: 3rem;
   display: flex;
   justify-content: space-evenly;
@@ -93,4 +93,16 @@ height: 30px;
 }
 .animate-button:hover {
   color: white;
+}
+
+.input-border{
+  padding: 2px;
+  background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+  border-radius: 15px; 
+}
+.input-border>div{
+  border-radius: 15px; 
+}
+.input-border>div>input:focus{
+outline: none;
 }

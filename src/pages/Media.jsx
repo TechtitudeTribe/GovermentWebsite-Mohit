@@ -14,6 +14,7 @@ import image12 from "/gallery-12.jfif";
 import image13 from "/gallery-13.jfif";
 import locationIcon from "/location.svg";
 import "../utils/Media.css";
+import AnimatedButton from "../components/AnimatedButton";
 export default function Media() {
   const data = [
     image1,
@@ -38,7 +39,7 @@ export default function Media() {
   ];
 
   return (
-    <div className=" p-6 min-[800px]:p-20 bg-mid_gray">
+    <div className=" p-2 lg:p-8  xl:p-20 bg-mid_gray">
       <div className="flex items-center gap-4 w-fit m-auto">
         <img src={leafsDesign} alt="leaf-design" className="h-10" />
         <h2 className=" text-4xl font-light bg-transparent">
@@ -46,10 +47,17 @@ export default function Media() {
         </h2>
         <img src={leafsDesign} alt="leaf-design" className="h-10" />
       </div>
-      <div className="grid grid-cols-4 gap-4 ">
+      <div className="min-[850px]:hidden text-center mt-8">
+      <p className="font-medium ">{data[1].text1}</p>
+      <p className="font-light ">{data[1].text2}</p>
+      </div>
+      <div className="grid grid-cols-2  min-[850px]:grid-cols-4 gap-3 min-[850px]:gap-5  mt-8">
         {data.map((element, index) =>
           index === 1 ? (
-            <div key={index} className=" p-6 col-span-2 text-center  flex flex-col justify-center gap-4">
+            <div
+              key={index}
+              className=" max-[850px]:hidden  p-6 col-span-2 text-center  flex flex-col justify-center gap-4"
+            >
               <p className="font-medium ">{element.text1}</p>
               <p className="font-light ">{element.text2}</p>
             </div>
@@ -57,17 +65,17 @@ export default function Media() {
             <div
               key={index}
               className={`gallery-card ${
-                (index === 0 || index == 2) && "row-span-2"
+                (index === 0 || index == 2) && "min-[850px]:row-span-2"
               } ${
-                (index === 5 || index === 10 || index === 12) && "col-span-2"
+                (index === 5 || index === 10 || index === 12) && "min-[850px]:col-span-2"
               }`}
             >
               <img src={element} alt="Image-1" />
-              <div className="circle top-left-circle">
+              <div className="circle top-left-circle max-[850px]:hidden">
                 <div className="small-underline">2023</div>
                 <p>March 1</p>
               </div>
-              <div className="circle bottom-right-circle">
+              <div className="circle bottom-right-circle max-[850px]:hidden">
                 <img src={locationIcon} alt="location-icon" />
                 <p>Dhampur</p>
               </div>
@@ -75,14 +83,7 @@ export default function Media() {
           )
         )}
       </div>
-      <div className="animate-button m-auto mt-10">
-              <p className="font-medium">VIEW MORE</p>
-              <div className="flex justify-center items-center gap-1">
-
-              <p className="font-extrabold text-2xl mb-4">.</p>
-              <svg className="right-arrow"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22.707,12.707a1,1,0,0,0,0-1.414l-6-6a1,1,0,0,0-1.414,1.414L19.586,11H2a1,1,0,0,0,0,2H19.586l-4.293,4.293a1,1,0,0,0,1.414,1.414Z"/></svg>
-              </div>
-            </div>
+      <AnimatedButton text="VIEW MORE" />
     </div>
   );
 }

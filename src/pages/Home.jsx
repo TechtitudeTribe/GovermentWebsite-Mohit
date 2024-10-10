@@ -10,6 +10,7 @@ import startingQuotes from '/starting-quotes.svg'
 import { useEffect, useState } from "react";
 import AwardsCard from "../components/AwardsCard";
 import '../utils/Home.css'
+import AnimatedButton from "../components/AnimatedButton";
 export default function Home() {
   const slides = [homeBanner1, homeBanner1, homeBanner1];
   const slideProperties = {
@@ -77,17 +78,17 @@ const awardCard = {
             ))}
           </Slide>
         </div>
-        <div className="flex bg-secondary items-center ">
+        <div className="flex bg-secondary items-center text-sm min-[480px]:text-base">
           <div className="flex relative items-center bg-primary  font-medium  h-14">
-            <p className="ml-24 mr-5 w-fit whitespace-nowrap">LATEST NEWS</p>
+            <p className="ml-4  min-[480px]:ml-24 mr-5 w-fit whitespace-nowrap">LATEST NEWS</p>
             <img
               src={whiteCorner}
               alt="white-corner"
               className=" absolute -right-4 z-10 h-full"
             />
           </div>
-
-          <div className="overflow-hidden relative w-full ">
+<button className="ml-6 bg-primary text-white p-2 rounded-xl">Download Pariwar Nakal</button>
+          {/* <div className="overflow-hidden relative w-full ">
             <div
               className={`flex whitespace-nowrap ${
                 isLeftToRight ? "animate-slide-reverse" : "animate-slide"
@@ -101,12 +102,12 @@ const awardCard = {
                 voluptas sit aspernatur aut odit aut fugit
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
 
-      <section className="flex gap-6  p-6 min-[800px]:px-20 bg-mid_gray">
-        <div className=" h-screen w-2/4 mb-28">
+      <section className="min-[800px]:grid grid-cols-2 gap-8  p-6 min-[800px]:px-20 bg-mid_gray">
+        <div className="my-14">
           <div className="flex items-end gap-6 h-16">
             <img src={leafsDesign} alt="leafs-design" className="h-full" />
             <h2 className="text-5xl font-light gradient-border bg-transparent">
@@ -144,20 +145,13 @@ const awardCard = {
               animi, id est laborum et dolorum fuga.
             </p>
           </div>
-            <div className="animate-button">
-              <p className="font-medium">READ MORE</p>
-              <div className="flex justify-center items-center gap-1">
-
-              <p className="font-extrabold text-2xl mb-4">.</p>
-              <svg className="right-arrow"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22.707,12.707a1,1,0,0,0,0-1.414l-6-6a1,1,0,0,0-1.414,1.414L19.586,11H2a1,1,0,0,0,0,2H19.586l-4.293,4.293a1,1,0,0,0,1.414,1.414Z"/></svg>
-              </div>
-            </div>
+<AnimatedButton text={"READ MORE"}/>
 
         </div>
 
 
 
-        <div className="grid grid-cols-2 gap-8 ">
+        <div className="grid grid-cols-2 gap-8 max-[1280px]:grid-cols-1">
           {aboutCards.map((card, index) => (
             <div key={index}>
               <div key={index} className=" corner-border ">
@@ -179,9 +173,9 @@ const awardCard = {
 
       <section className="p-6 min-[800px]:px-20">
         <div className="flex items-center gap-4 m-auto w-fit p-4">
-          <img src={leafsDesign} alt="leafs-design"  className="h-14"/>
-          <h2 className=" text-5xl font-light z-10 bg-white">Award<span className="gradient-border after:bottom-1 ">s & Recognization</span></h2>
-          <img src={leafsDesign} alt="leafs-design"  className="h-14"/>
+          <img src={leafsDesign} alt="leafs-design"  className="h-6 min-[480px]:h-14"/>
+          <h2 className="text-lg  min-[480px]:text-5xl font-light z-10 bg-white">Award<span className="gradient-border after:bottom-1 ">s & Recognization</span></h2>
+          <img src={leafsDesign} alt="leafs-design"  className="h-6 min-[480px]:h-14"/>
         </div>
         <div className="text-center my-2">
           <p className="min-[800px]:w-3/4 m-auto font-medium my-2">“It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages”</p>
@@ -190,7 +184,7 @@ const awardCard = {
         <div id="home-slideshow-2"  className="relative">
         <Slide {...slideProperties}>
             {Array.from({length:3},(_,index1)=>(
-              <div key={index1+1} className="award-slide flex justify-evenly gap-10">
+              <div key={index1+1} className="award-slide min-[480px]:flex justify-evenly gap-10">
                 {Array.from({length:3},(_,index2)=>(
                  <AwardsCard key={index2+1} details={awardCard}/>
                 ))}
@@ -201,16 +195,16 @@ const awardCard = {
       </section>
 
 
-      <section className={`flex p-6 min-[800px]:px-20  justify-between bg-background_image_1  bg-no-repeat bg-center bg-cover`}>
-        <div className="flex items-center gap-4">
+      <section className={`grid grid-cols-1 min-[600px]:grid-cols-2 xl:grid-cols-4  p-4 px-0 lg:px-10  xl:px-20   bg-background_image_1  bg-no-repeat bg-center bg-cover`}>
+        <div className="flex items-center gap-4 m-auto my-4">
           <img src={leafsDesign} alt="leaf-design"  className="h-10"/>
             <div className="relative text-white">
             <h2 className="border-b-2 border-white text-4xl font-light">Achievements</h2>
             </div>
         </div>
             {Array.from({length:3},(_,index)=>(
-              <div key={index+1} className={`flex items-center gap-8  p-4 py-5  rounded-tr-3xl rounded-bl-3xl  ${index === 0 ? "bg-primary" : index===1 ? "bg-white" : "bg-secondary"}`}>
-                <img src={homeIcon} alt="home-icon" />
+              <div key={index+1} className={`flex items-center gap-8 w-fit  p-4 py-5  rounded-tr-3xl rounded-bl-3xl m-auto my-4  ${index === 0 ? "bg-primary" : index===1 ? "bg-white" : "bg-secondary"}`}>
+                <img src={homeIcon} alt="home-icon" className="h-full"/>
                 <div>
                   <h4 className="text-2xl font-medium">{index === 0 ? "450K+" : index===1 ? "3000+" : "76.9K+"}</h4>
                   <p>Data Information {index+1}</p>
@@ -222,11 +216,11 @@ const awardCard = {
 
       <section className="p-6 my-4  min-[800px]:px-20">
       <div className="flex items-center gap-4 w-fit m-auto my-4">
-          <img src={leafsDesign} alt="leaf-design"  className="h-10"/>
+          <img src={leafsDesign} alt="leaf-design"  className="h-6 min-[480px]:h-10"/>
             <div className="relative">
             <h2 className="  border-b-2 border-white text-4xl font-light">Te<span className="gradient-border after:w-full">stimoni</span>als</h2>
             </div>
-          <img src={leafsDesign} alt="leaf-design"  className="h-10"/>
+          <img src={leafsDesign} alt="leaf-design"  className="h-6 min-[480px]:h-10"/>
         </div>
         <div id="home-slideshow-3" className=" m-auto">
           <Slide {...slideProperties}>
@@ -243,6 +237,7 @@ const awardCard = {
           </Slide>
         </div>
       </section>
+      <button className="fixed -mt-4  bottom-8 right-5 z-10  p-3 px-5 bg-black text-white rounded-2xl">Download Pariwar Nakal</button>
     </div>
   );
 }

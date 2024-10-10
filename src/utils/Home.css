@@ -18,8 +18,8 @@
       transition: width 300ms;
     }
     /*___________Sliding Text_______________*/
-    @keyframes slide {
-      /*from right to left*/
+    /* @keyframes slide {
+
       0% {
         transform: translateX(100%);
       }
@@ -32,7 +32,7 @@
     }
     
     @keyframes slide-reverse {
-      /* from left to right*/
+
       0% {
         transform: translateX(-100%);
       }
@@ -50,7 +50,7 @@
     
     .animate-slide-reverse {
       animation: slide-reverse 30s linear infinite;
-    }
+    } */
 
     #home-slideshow-2 .slide-indicator {
       width: 10px;

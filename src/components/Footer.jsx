@@ -28,7 +28,7 @@ export default function Footer({active}) {
           ];
   return (
     <div className="">
-      <section className="grid grid-cols-4 gap-20 p-6 min-[800px]:px-20">
+      <section className="min-[480px]:grid grid-cols-4 gap-20 p-6 min-[800px]:px-20">
         <div className="col-span-2">
           <img src={logo} alt="logo" className="my-4 h-14"/>
           <p className="font-medium my-4">
@@ -62,7 +62,9 @@ export default function Footer({active}) {
         <NavLink><div className="flex items-center gap-1"><p className=" w-2 border-b-[3px] border-black  rounded-full"></p><p className="font-medium my-2">Terms & Conditions</p></div></NavLink>  
         </div>
       </section>
-      <section className="flex justify-between  bg-black text-white p-6 min-[800px]:px-20">
+
+
+      <section className="min-[480px]:flex justify-between  bg-black text-white p-6 min-[800px]:px-20">
           <div className="font-light text-sm">
             <p className="my-2">WE HELP THOSE.........WHO CAN'T HELP THEMSELVES</p>
             <p className="my-2">Copyright © 2022 Animal Husbandry Department Government of Uttar Pradesh, India. All rights reserved</p>

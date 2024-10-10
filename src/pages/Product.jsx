@@ -9,7 +9,7 @@ export default function Product() {
           Product 1
         </h2>
       </div>
-      <div className="grid grid-cols-2 gap-4 min-[800px]:gap-10">
+      <div className="flex flex-col-reverse mt-8 lg:mt-0  lg:grid grid-cols-2 gap-4 min-[800px]:gap-10">
         <div >
           <p className="my-4">
             Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -45,7 +45,7 @@ export default function Product() {
           </p>
         </div>
 
-        <div className=" corner-border max-h-[410px]">
+        <div className=" corner-border h-fit">
           <div className="top-left -top-3 -left-3"></div>
           <div className="bottom-right -bottom-2 -right-3"></div>
           <div className="  p-1 mb-1  text-center font-light text-lg  rounded-tr-[85px] rounded-bl-[85px] overflow-hidden">
@@ -56,7 +56,8 @@ export default function Product() {
             />
           </div>
         </div>
-        <p className="col-span-2 -mt-8">
+      </div>
+        <p className="col-span-2 mt-2">
           The use of male cow calves now at minimal requirement to farmers
           because of heavy mechanization in the agriculture. Besides that the
           low yielding cow which are non-profitable are burden on farmers to
@@ -74,7 +75,6 @@ export default function Product() {
           regarding creation of temporary establishments for destitute cattle .
           These directives laid out the following –
         </p>
-      </div>
 
     </div>
   );
