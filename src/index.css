@@ -5,3 +5,9 @@
       --color-primary : #ff7723;
       --color-secondary : #15a319
 }
+@layer base {
+      @font-face {
+        font-family: "Kruti Dev";
+        src: url(./assets/KrutiDev010Regular.ttf) format("truetype");
+      }
+    }

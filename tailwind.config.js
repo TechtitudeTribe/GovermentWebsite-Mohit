@@ -13,6 +13,9 @@ export default {
       },
       backgroundImage:{
         background_image_1 : "url('/background-image-1.jfif')"
+      },
+      fontFamily:{
+        kruti_dev:["Kruti Dev",'sans-serif']
       }
     },
   },

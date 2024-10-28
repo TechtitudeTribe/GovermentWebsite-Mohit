@@ -1,6 +1,6 @@
 export default function AnimatedButton({text = "Default"}) {
   return (
-      <div className="animate-button m-auto mt-10">
+      <div className="animate-button m-auto mt-6">
       <p className="font-medium">{text}</p>
       <div className="flex justify-center items-center gap-1">
 
