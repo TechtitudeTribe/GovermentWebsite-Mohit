@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import AnimatedButton from "../components/AnimatedButton";
 import syncIcon from "/sync-icon.svg";
 import axios from "axios";
@@ -14,11 +14,13 @@ import {
   Button,
   Text,
   Box,
+  useToast,
 } from "@chakra-ui/react";
 import excelDateToJSDate from "../helpers/excelToJSDate";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { krutiBase64 } from "../assets/Kruti-Base64";
+import { AuthContext } from "../contexts/AuthContext";
 export default function SearchHouse() {
   const API_URL = import.meta.env.VITE_API_URL;
   const [owner, setOwner] = useState(null);
@@ -27,6 +29,9 @@ export default function SearchHouse() {
   const [searchValue, setSearchValue] = useState("");
   const [state, setState] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {user} = useContext(AuthContext)
+  const toast = useToast()
+  
   const tableHeaders = [
     "Øe la-",
     "edku uEcj",
@@ -77,12 +82,81 @@ export default function SearchHouse() {
       setState({ msg: "Unknow error, please try again!!", value: null });
     }
   };
+  const handleDelete =async (id)=>{
+    try {
+      const deleteResponse = await axios.delete(`${API_URL}/delete-one/hindi/${id}`)
+      if (deleteResponse.status === 200) {
+        toast({
+          title: 'Data deleted',
+          status: 'success',
+          position : "top",
+          duration: 5000,
+          isClosable: true,
+        })
+        setTabledata(tabledata.filter(element=>element.id!==id))
+      }else{
+        toast({
+          title: 'Failed to delete data',
+          description : 'Please Try again.',
+          status: 'error',
+          position : "top",
+          duration: 9000,
+          isClosable: true,
+        })
+      }
+    } catch (error) {
+      console.log(error.response);
+      toast({
+        title: 'Failed to delete data',
+        description : 'Please Try again.',
+        status: 'error',
+        position : "top",
+        duration: 9000,
+        isClosable: true,
+      })
+    }
+  }
   const downloaddPDF = () => {
-    const doc = new jsPDF();
-    doc.addFileToVFS("Kruti-Dev-010.ttf", krutiBase64);
-    doc.addFont("Kruti-Dev-010.ttf", "Kruti-Dev-010", "normal");
-    doc.setFont("Kruti-Dev-010");
-    doc.text("f'koe pkS/kjh", 10, 10);
+    const pdf = new jsPDF();
+    pdf.addFileToVFS("Kruti-Dev-010.ttf", krutiBase64);
+    pdf.addFont("Kruti-Dev-010.ttf", "Kruti-Dev-010", "normal");
+    pdf.setFont("Kruti-Dev-010");
+    pdf.setFontSize(14);
+    let currentX = 10;
+    let currentY = 10;
+    pdf.text("izk:Ik ¼d0½", currentX, currentY); //Left1
+    currentY += 7.5; //17.5
+    pdf.text("¼fu;e 2 nssf[k;s½", currentX, currentY); //Left2
+    pdf.setFontSize(40);
+    const heading = "ifjokj jftLVj";
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const textWidth = pdf.getTextWidth(heading);
+    const x = (pageWidth - textWidth) / 2; // Centering the text
+    currentY -= 2.5; //15
+    pdf.text(heading, x, currentY); //Heading
+    pdf.setFontSize(14);
+    currentY += 10; //25
+    pdf.text("xzke lHkk dk uke /keZiqjk", currentX, currentY);
+    const rightText = "U;k; iapk;r dk uke uoknk";
+    const rightTextWidth = pdf.getTextWidth(rightText);
+    const rightTextPositionX = pageWidth - textWidth + 17.5;
+    pdf.text(rightText, rightTextPositionX, currentY);
+    currentY += 10;
+    const texts = [
+      "xkWo dk uke & /keZiqjk",
+      "fodkl [k.M & gYnkSj",
+      "rglhy & fctukSj",
+      "ftyk & fctukSj",
+    ];
+    let eachTextWidth = 40;
+    const totalSpacing =
+      (pageWidth - texts.length * eachTextWidth) / (texts.length + 1);
+    currentX = totalSpacing;
+    texts.forEach((text) => {
+      pdf.text(text, currentX, currentY);
+      currentX += eachTextWidth + totalSpacing + 5;
+    });
+    currentX = 10;
     const tableData1 = tabledata.map((row, index) => [
       index + 1,
       row.house_no,
@@ -96,15 +170,33 @@ export default function SearchHouse() {
       row.abhiyukti,
       row.shachhar,
     ]);
-    autoTable(doc, {
+    autoTable(pdf, {
       head: [[...tableHeaders]],
       body: [...tableData1],
+      startY: currentY + 5,
+
+      theme: "plain",
+      tableLineWidth: 0.5,
+      tableLineColor: "black",
       styles: {
         font: "Kruti-Dev-010",
+        lineWidth: 0.5,
+        lineColor: "black",
+        halign: "center",
+      },
+      columnStyles: {
+        0: { font: "Arial" },
+        1: { font: "Arial" },
+        6: { font: "Arial" },
+        7: { font: "Arial" },
       },
     });
-    console.log(doc);
-    doc.save("pariwar-table.pdf");
+    const tableHeight = pdf.autoTable.previous.finalY;
+    pdf.text(
+      `fVIi.kh%& vH;qfDr LrEHk esa vkns'k dh dh la[;k rFkk fnukad] ;fn dksbZ gks] ftlds }kjk dksbZ uke c<+k;k ;k gVk;k x;k gks] ds lkFk izfof"V djus okys ds gLrk{kj Hkh fd;s tkus pkfg;sA`,
+      currentX,tableHeight+10,{maxWidth:pageWidth-20}
+    );
+    pdf.save("pariwar-table.pdf");
   };
   return (
     <div className="bg-mid_gray p-6 min-[800px]:px-20">
@@ -172,7 +264,7 @@ export default function SearchHouse() {
                 >
                   <td className="p-4 ">{owner.house_no}</td>
                   <td className="p-4 font-kruti_dev">{owner.house_owner}</td>
-                  <td className="p-4 ">{owner.dob}</td>
+                  <td className="p-4 ">{excelDateToJSDate(owner.dob)}</td>
                   <td className="p-4 font-kruti_dev">{owner.occupation}</td>
                 </tr>
               </tbody>
@@ -195,9 +287,9 @@ export default function SearchHouse() {
           )}
         </div>
       </div>
-      <Modal onClose={onClose} size={"xl"} isOpen={isOpen}>
+      <Modal  onClose={onClose} size={"xl"} isOpen={isOpen} > 
         <ModalOverlay />
-        <ModalContent minW={"90vw"}>
+        <ModalContent>
           <ModalHeader className=" w-full font-kruti_dev">
             <Box className="flex">
               <Box className="">
@@ -226,7 +318,7 @@ export default function SearchHouse() {
                   className="border border-black table-auto text-center text-black"
                 >
                   <thead className="border-2 border-black whitespace-nowrap lg:whitespace-normal">
-                    <tr className="font-kruti_dev border-2 border-black">
+                    <tr className=" border-2 border-black">
                       {tableHeaders.map((ele, i) => (
                         <th
                           key={i}
@@ -235,6 +327,7 @@ export default function SearchHouse() {
                           <p className="font-kruti_de  text-xl ">{ele}</p>
                         </th>
                       ))}
+                      {user && <th>Delete</th>}
                     </tr>
                   </thead>
                   <tbody className="border-2 border-black">
@@ -266,11 +359,15 @@ export default function SearchHouse() {
                           {element.occupation}
                         </td>
                         <td className="font-kruti_dev border-2 border-black  text-xl">
-                          {element.abhiyukti}
-                        </td>
-                        <td className="font-kruti_dev border-2 border-black  text-xl">
                           {element.shachhar}
                         </td>
+                        <td className="font-kruti_dev border-2 border-black  text-xl">
+                          {element.death_date}
+                        </td>
+                        <td className="font-kruti_dev border-2 border-black  text-xl">
+                          {element.abhiyukti}
+                        </td>
+                        {user && <td className="p-1"><Button colorScheme="red"   onClick={()=>handleDelete(element.id)}>Delete</Button></td>}
                       </tr>
                     ))}
                   </tbody>

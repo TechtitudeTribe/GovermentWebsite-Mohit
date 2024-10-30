@@ -13,6 +13,7 @@ import Footer from './components/Footer'
 import Location from './components/Location'
 import InvalidPage from './pages/InvalidPage'
 import SearchHouse from './pages/SearchHouse'
+import Dashboard from './pages/Dashboard'
 
 function App() {
   const [activeRoute, setActiveRoute] = useState('/')
@@ -39,6 +40,7 @@ const UpdateRoute = ()=>{
       <Route path='/contact-us' element={<ContactUs/>}/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/search' element={<SearchHouse/>}/>
+      <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='*' element={<InvalidPage/>}/>
     </Routes>
     <Footer active={activeRoute}/>
