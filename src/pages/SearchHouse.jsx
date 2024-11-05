@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AnimatedButton from "../components/AnimatedButton";
 import syncIcon from "/sync-icon.svg";
 import axios from "axios";
@@ -15,12 +15,14 @@ import {
   Text,
   Box,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import excelDateToJSDate from "../helpers/excelToJSDate";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { krutiBase64 } from "../assets/Kruti-Base64";
 import { AuthContext } from "../contexts/AuthContext";
+import { LanguageContext } from "../contexts/LanguageContext";
 export default function SearchHouse() {
   const API_URL = import.meta.env.VITE_API_URL;
   const [owner, setOwner] = useState(null);
@@ -29,10 +31,11 @@ export default function SearchHouse() {
   const [searchValue, setSearchValue] = useState("");
   const [state, setState] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {user} = useContext(AuthContext)
-  const toast = useToast()
-  
-  const tableHeaders = [
+  // const { user } = useContext(AuthContext);
+  const { language } = useContext(LanguageContext);
+  // const toast = useToast();
+
+  const tableHeadersHindi = [
     "Øe la-",
     "edku uEcj",
     "ifjokj ds eqf[k;k dk uke",
@@ -46,8 +49,24 @@ export default function SearchHouse() {
     "lfdZy NksM+ nsus ;k e`R;q dk fnukad",
     "vH;qfDr",
   ];
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const tableHeadersEnglish = [
+    "SL NO.",
+    "House No.",
+    "House Owner's Name",
+    "Name",
+    "Father/Husband Name",
+    "Male or Female",
+    "Caste",
+    "Date of Birth",
+    "Occupation",
+    "Education",
+    "Date of death",
+    "Complaints",
+  ];
+  const handleSubmit = async (event = null) => {
+    if (event) {
+      event.preventDefault(); 
+    }
     function isValidString(input) {
       const regex = /^[a-zA-Z!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~ ]*$/;
       return regex.test(input);
@@ -63,7 +82,7 @@ export default function SearchHouse() {
     if (owner) setOwner(null);
     setState({ msg: "Searching...", value: null });
     const response = await axios.get(
-      `${API_URL}/search/hindi/${searchType}?value=${searchValue}`
+      `${API_URL}/search/${language}/${searchType}?value=${searchValue}`
     );
     const data = response.data.filter((docs) => docs.name === docs.house_owner);
     if (response.status === 200 && data[0]) {
@@ -82,53 +101,30 @@ export default function SearchHouse() {
       setState({ msg: "Unknow error, please try again!!", value: null });
     }
   };
-  const handleDelete =async (id)=>{
-    try {
-      const deleteResponse = await axios.delete(`${API_URL}/delete-one/hindi/${id}`)
-      if (deleteResponse.status === 200) {
-        toast({
-          title: 'Data deleted',
-          status: 'success',
-          position : "top",
-          duration: 5000,
-          isClosable: true,
-        })
-        setTabledata(tabledata.filter(element=>element.id!==id))
-      }else{
-        toast({
-          title: 'Failed to delete data',
-          description : 'Please Try again.',
-          status: 'error',
-          position : "top",
-          duration: 9000,
-          isClosable: true,
-        })
-      }
-    } catch (error) {
-      console.log(error.response);
-      toast({
-        title: 'Failed to delete data',
-        description : 'Please Try again.',
-        status: 'error',
-        position : "top",
-        duration: 9000,
-        isClosable: true,
-      })
-    }
-  }
+
   const downloaddPDF = () => {
     const pdf = new jsPDF();
-    pdf.addFileToVFS("Kruti-Dev-010.ttf", krutiBase64);
-    pdf.addFont("Kruti-Dev-010.ttf", "Kruti-Dev-010", "normal");
-    pdf.setFont("Kruti-Dev-010");
+    if (language === "hindi") {
+      pdf.addFileToVFS("Kruti-Dev-010.ttf", krutiBase64);
+      pdf.addFont("Kruti-Dev-010.ttf", "Kruti-Dev-010", "normal");
+      pdf.setFont("Kruti-Dev-010");
+    }
     pdf.setFontSize(14);
     let currentX = 10;
     let currentY = 10;
-    pdf.text("izk:Ik ¼d0½", currentX, currentY); //Left1
+    pdf.text(
+      language === "hindi" ? `izk:Ik ¼d0½` : "Format",
+      currentX,
+      currentY
+    ); //Left1
     currentY += 7.5; //17.5
-    pdf.text("¼fu;e 2 nssf[k;s½", currentX, currentY); //Left2
+    pdf.text(
+      language === "hindi" ? `¼fu;e 2 nssf[k;s½` : "(A) (See rule 2)",
+      currentX,
+      currentY
+    ); //Left2
     pdf.setFontSize(40);
-    const heading = "ifjokj jftLVj";
+    const heading = language === "hindi" ? `ifjokj jftLVj` : "Family Register";
     const pageWidth = pdf.internal.pageSize.getWidth();
     const textWidth = pdf.getTextWidth(heading);
     const x = (pageWidth - textWidth) / 2; // Centering the text
@@ -136,26 +132,54 @@ export default function SearchHouse() {
     pdf.text(heading, x, currentY); //Heading
     pdf.setFontSize(14);
     currentY += 10; //25
-    pdf.text("xzke lHkk dk uke /keZiqjk", currentX, currentY);
-    const rightText = "U;k; iapk;r dk uke uoknk";
-    const rightTextWidth = pdf.getTextWidth(rightText);
+    pdf.text(
+      language === "hindi"
+        ? `xzke lHkk dk uke /keZiqjk`
+        : "Name of the village council is Dharampura",
+      currentX,
+      currentY
+    );
+    const rightText =
+      language === "hindi"
+        ? `U;k; iapk;r dk uke uoknk`
+        : "Name of Nyaya Panchayat Nawada";
+    // const rightTextWidth = pdf.getTextWidth(rightText);
     const rightTextPositionX = pageWidth - textWidth + 17.5;
     pdf.text(rightText, rightTextPositionX, currentY);
     currentY += 10;
-    const texts = [
+    const hindiTexts = [
       "xkWo dk uke & /keZiqjk",
       "fodkl [k.M & gYnkSj",
       "rglhy & fctukSj",
       "ftyk & fctukSj",
     ];
-    let eachTextWidth = 40;
-    const totalSpacing =
-      (pageWidth - texts.length * eachTextWidth) / (texts.length + 1);
-    currentX = totalSpacing;
-    texts.forEach((text) => {
-      pdf.text(text, currentX, currentY);
-      currentX += eachTextWidth + totalSpacing + 5;
-    });
+    const englishTexts = [
+      "Village: Dharmapura",
+      "Block Haldaur",
+      "Tehsil Bijnor",
+      "District - Bijnor",
+    ];
+    if (language === "hindi") {
+      let eachTextWidth = 40;
+      const totalSpacing =
+        (pageWidth - hindiTexts.length * eachTextWidth) /
+        (hindiTexts.length + 1);
+      currentX = totalSpacing;
+      hindiTexts.forEach((text) => {
+        pdf.text(text, currentX, currentY);
+        currentX += eachTextWidth + totalSpacing + 5;
+      });
+    } else {
+      let eachTextWidth = 45;
+      const totalSpacing =
+        (pageWidth - englishTexts.length * eachTextWidth) /
+        (englishTexts.length + 1);
+      currentX = totalSpacing;
+      englishTexts.forEach((text) => {
+        pdf.text(text, currentX, currentY);
+        currentX += eachTextWidth + totalSpacing + 5;
+      });
+    }
     currentX = 10;
     const tableData1 = tabledata.map((row, index) => [
       index + 1,
@@ -171,7 +195,8 @@ export default function SearchHouse() {
       row.shachhar,
     ]);
     autoTable(pdf, {
-      head: [[...tableHeaders]],
+      head:language === "hindi"
+      ? [[...tableHeadersHindi]] : [[...tableHeadersEnglish]],
       body: [...tableData1],
       startY: currentY + 5,
 
@@ -193,11 +218,21 @@ export default function SearchHouse() {
     });
     const tableHeight = pdf.autoTable.previous.finalY;
     pdf.text(
-      `fVIi.kh%& vH;qfDr LrEHk esa vkns'k dh dh la[;k rFkk fnukad] ;fn dksbZ gks] ftlds }kjk dksbZ uke c<+k;k ;k gVk;k x;k gks] ds lkFk izfof"V djus okys ds gLrk{kj Hkh fd;s tkus pkfg;sA`,
-      currentX,tableHeight+10,{maxWidth:pageWidth-20}
+      language === "hindi"
+        ? `fVIi.kh%& vH;qfDr LrEHk esa vkns'k dh dh la[;k rFkk fnukad] ;fn dksbZ gks] ftlds }kjk dksbZ uke c<+k;k ;k gVk;k x;k gks] ds lkFk izfof"V djus okys ds gLrk{kj Hkh fd;s tkus pkfg;sA`
+        : "In the Remarks column, the number and date of the order, if any, by which a name has been added or deleted, should also be mentioned along with the signature of the person making the entry.",
+      currentX,
+      tableHeight + 10,
+      { maxWidth: pageWidth - 20 }
     );
     pdf.save("pariwar-table.pdf");
   };
+  useEffect(()=>{
+    setTabledata([])
+    if(searchType && searchValue){
+      handleSubmit()
+    }
+  },[language])
   return (
     <div className="bg-mid_gray p-6 min-[800px]:px-20">
       <div className="p-2 flex gap-10 justify-center ">
@@ -211,7 +246,10 @@ export default function SearchHouse() {
                 : "Enter House Owner Name."
             }  `}
             className={`${
-              searchType === "house_owner" && searchValue && "font-kruti_dev"
+              searchType === "house_owner" &&
+              searchValue &&
+              language === "hindi" &&
+              "font-kruti_dev"
             }  rounded-full bg-white p-2 px-4 w-2/6 placeholder:text-black border border-black`}
             // value={searchValue}
             onChange={(e) =>
@@ -263,50 +301,98 @@ export default function SearchHouse() {
                   className="cursor-pointer  bg-red-200 text-2xl"
                 >
                   <td className="p-4 ">{owner.house_no}</td>
-                  <td className="p-4 font-kruti_dev">{owner.house_owner}</td>
+                  <td
+                    className={`p-4 ${
+                      language === "hindi" && "font-kruti_dev"
+                    }`}
+                  >
+                    {owner.house_owner}
+                  </td>
                   <td className="p-4 ">{excelDateToJSDate(owner.dob)}</td>
-                  <td className="p-4 font-kruti_dev">{owner.occupation}</td>
+                  <td
+                    className={`p-4 ${
+                      language === "hindi" && "font-kruti_dev"
+                    }`}
+                  >
+                    {owner.occupation}
+                  </td>
                 </tr>
               </tbody>
             </table>
           ) : (
             state?.msg && (
-              <h3 className="w-fit m-auto text-xl p-4 font-medium">
+              <div className="flex justify-center items-center w-fit m-auto">
+              <h3 className=" text-xl p-4 font-medium">
                 {state?.msg}{" "}
                 {state?.value && (
                   <span
                     className={`${
-                      searchType === "house_owner" && "font-kruti_dev"
+                      searchType === "house_owner" &&
+                      language === "hindi" &&
+                      "font-kruti_dev"
                     }`}
                   >
                     {state.value}
                   </span>
                 )}
               </h3>
+              {state?.msg === "Searching..." && <Spinner thickness="4px"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"/>}
+               </div>
             )
           )}
         </div>
       </div>
-      <Modal  onClose={onClose} size={"xl"} isOpen={isOpen} > 
+      <Modal onClose={onClose} size={"xl"} isOpen={isOpen}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader className=" w-full font-kruti_dev">
+        <ModalContent minW={"95vw"}>
+          <ModalHeader
+            className={`w-full ${language === "hindi" && "font-kruti_dev"}  `}
+          >
             <Box className="flex">
-              <Box className="">
-                <Text>izk:Ik ¼d0½ </Text>
-                <Text>¼fu;e 2 nssf[k;s½ </Text>
+              <Box>
+                <Text>{language === "hindi" ? `izk:Ik ¼d0½` : "Format"} </Text>
+                <Text>
+                  {language === "hindi"
+                    ? `¼fu;e 2 nssf[k;s½`
+                    : "(A) (See rule 2)"}{" "}
+                </Text>
               </Box>
-              <Text className="m-auto text-6xl">ifjokj jftLVj</Text>
+              <Text className="m-auto text-6xl">
+                {language === "hindi" ? `ifjokj jftLVj` : "Family Register"}
+              </Text>
             </Box>
             <Box className="flex justify-between">
-              <Text>xzke lHkk dk uke /keZiqjk</Text>
-              <Text>U;k; iapk;r dk uke uoknk</Text>
+              <Text>
+                {language === "hindi"
+                  ? `xzke lHkk dk uke /keZiqjk`
+                  : "Name of the village council is Dharampura"}
+              </Text>
+              <Text>
+                {language === "hindi"
+                  ? `U;k; iapk;r dk uke uoknk`
+                  : "Name of Nyaya Panchayat Nawada"}
+              </Text>
             </Box>
             <Box className="flex justify-between">
-              <Text>xkWo dk uke & /keZiqjk </Text>
-              <Text>fodkl [k.M & gYnkSj</Text>
-              <Text>rglhy & fctukSj </Text>
-              <Text>ftyk & fctukSj</Text>
+              <Text>
+                {language === "hindi"
+                  ? `xkWo dk uke & /keZiqjk`
+                  : "Village: Dharmapura"}{" "}
+              </Text>
+              <Text>
+                {language === "hindi"
+                  ? `fodkl [k.M & gYnkSj`
+                  : "Block Haldaur"}
+              </Text>
+              <Text>
+                {language === "hindi" ? `rglhy & fctukSj` : "Tehsil Bijnor"}{" "}
+              </Text>
+              <Text>
+                {language === "hindi" ? `ftyk & fctukSj` : "District - Bijnor"}
+              </Text>
             </Box>
           </ModalHeader>
           <ModalCloseButton />
@@ -315,19 +401,24 @@ export default function SearchHouse() {
               <>
                 <table
                   id="pariwar-table"
-                  className="border border-black table-auto text-center text-black"
+                  className="m-auto  border border-black table-auto text-center text-black"
                 >
                   <thead className="border-2 border-black whitespace-nowrap lg:whitespace-normal">
                     <tr className=" border-2 border-black">
-                      {tableHeaders.map((ele, i) => (
-                        <th
-                          key={i}
-                          className="p-1  font-kruti_dev border-2 border-black"
-                        >
-                          <p className="font-kruti_de  text-xl ">{ele}</p>
-                        </th>
-                      ))}
-                      {user && <th>Delete</th>}
+                      {language === "hindi"
+                        ? tableHeadersHindi.map((ele, i) => (
+                            <th
+                              key={i}
+                              className="p-1  font-kruti_dev border-2 border-black"
+                            >
+                              <p className=" text-xl ">{ele}</p>
+                            </th>
+                          ))
+                        : tableHeadersEnglish.map((ele, i) => (
+                            <th key={i} className="p-1 border-2 border-black">
+                              <p>{ele}</p>
+                            </th>
+                          ))}
                     </tr>
                   </thead>
                   <tbody className="border-2 border-black">
@@ -337,16 +428,32 @@ export default function SearchHouse() {
                         <td className="border-2 border-black">
                           {element.house_no}
                         </td>
-                        <td className="font-kruti_dev border-2 border-black  text-xl">
+                        <td
+                          className={`${
+                            language === "hindi" && "font-kruti_dev"
+                          } border-2 border-black  text-xl`}
+                        >
                           {element.house_owner}
                         </td>
-                        <td className="font-kruti_dev border-2 border-black  text-xl">
+                        <td
+                          className={`${
+                            language === "hindi" && "font-kruti_dev"
+                          } border-2 border-black  text-xl`}
+                        >
                           {element.name}
                         </td>
-                        <td className="font-kruti_dev border-2 border-black  text-xl">
+                        <td
+                          className={`${
+                            language === "hindi" && "font-kruti_dev"
+                          } border-2 border-black  text-xl`}
+                        >
                           {element.father_husband_name}
                         </td>
-                        <td className="font-kruti_dev border-2 border-black  text-xl">
+                        <td
+                          className={`${
+                            language === "hindi" && "font-kruti_dev"
+                          } border-2 border-black  text-xl`}
+                        >
                           {element.gender}
                         </td>
                         <td className="border-2 border-black">
@@ -355,19 +462,34 @@ export default function SearchHouse() {
                         <td className="border-2 border-black">
                           {excelDateToJSDate(element.dob)}
                         </td>
-                        <td className="font-kruti_dev border-2 border-black  text-xl">
+                        <td
+                          className={`${
+                            language === "hindi" && "font-kruti_dev"
+                          } border-2 border-black  text-xl`}
+                        >
                           {element.occupation}
                         </td>
-                        <td className="font-kruti_dev border-2 border-black  text-xl">
+                        <td
+                          className={`${
+                            language === "hindi" && "font-kruti_dev"
+                          } border-2 border-black  text-xl`}
+                        >
                           {element.shachhar}
                         </td>
-                        <td className="font-kruti_dev border-2 border-black  text-xl">
+                        <td
+                          className={`${
+                            language === "hindi" && "font-kruti_dev"
+                          } border-2 border-black  text-xl`}
+                        >
                           {element.death_date}
                         </td>
-                        <td className="font-kruti_dev border-2 border-black  text-xl">
+                        <td
+                          className={`${
+                            language === "hindi" && "font-kruti_dev"
+                          } border-2 border-black  text-xl`}
+                        >
                           {element.abhiyukti}
                         </td>
-                        {user && <td className="p-1"><Button colorScheme="red"   onClick={()=>handleDelete(element.id)}>Delete</Button></td>}
                       </tr>
                     ))}
                   </tbody>
@@ -378,10 +500,14 @@ export default function SearchHouse() {
             )}
           </ModalBody>
           <ModalFooter display={"block"} textAlign={"center"}>
-            <Text className="font-kruti_dev m-auto text-xl">
-              fVIi.kh%& vH;qfDr LrEHk esa vkns'k dh dh la[;k rFkk fnukad] ;fn
-              dksbZ gks] ftlds {"}"}kjk dksbZ uke c{"<"}+k;k ;k gVk;k x;k gks]
-              ds lkFk izfof"V djus okys ds gLrk{"{"}kj Hkh fd;s tkus pkfg;sA
+            <Text
+              className={`${
+                language === "hindi" && "font-kruti_dev"
+              } m-auto text-xl`}
+            >
+              {language === "hindi"
+                ? `fVIi.kh%& vH;qfDr LrEHk esa vkns'k dh dh la[;k rFkk fnukad] ;fn dksbZ gks] ftlds }kjk dksbZ uke c<+k;k ;k gVk;k x;k gks] ds lkFk izfof"V djus okys ds gLrk{kj Hkh fd;s tkus pkfg;sA`
+                : "In the Remarks column, the number and date of the order, if any, by which a name has been added or deleted, should also be mentioned along with the signature of the person making the entry."}
             </Text>
             <Button onClick={downloaddPDF}>Download as PDF</Button>
           </ModalFooter>

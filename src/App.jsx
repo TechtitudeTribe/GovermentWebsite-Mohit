@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './App.css'
 import Header from './components/Header'
 import Navbar from './components/Navbar'
@@ -14,14 +14,36 @@ import Location from './components/Location'
 import InvalidPage from './pages/InvalidPage'
 import SearchHouse from './pages/SearchHouse'
 import Dashboard from './pages/Dashboard'
+import { AuthContext } from './contexts/AuthContext'
+import axios from 'axios'
 
 function App() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [activeRoute, setActiveRoute] = useState('/')
-  
+  const {user , setUser } = useContext(AuthContext)
+  const verifyLogin = async ()=>{
+    if(!user) return
+    try {
+      const response = await axios.post(`${API_URL}/verify-login`,null,{headers :{
+        authorization :`bearer ${user.token}`
+      }})
+      if(response.status === 200) return
+    } catch (error) {
+      console.log(error);
+      
+      if(error.response.status === 401){
+        console.log('here');
+        setUser(null)
+        localStorage.setItem('auth',null)
+      }else{
+        return
+      }
+    }
+  }
 const UpdateRoute = ()=>{
   const location = useLocation()
   useEffect(()=>{
-   
+   verifyLogin()
     setActiveRoute(location.pathname)
   },[location])
 }
@@ -39,7 +61,7 @@ const UpdateRoute = ()=>{
       <Route path='/media' element={<Media/>}/>
       <Route path='/contact-us' element={<ContactUs/>}/>
       <Route path='/login' element={<Login/>}/>
-      <Route path='/search' element={<SearchHouse/>}/>
+      <Route path='/download-pariwar-nakal' element={<SearchHouse/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='*' element={<InvalidPage/>}/>
     </Routes>

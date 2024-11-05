@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import AwardsCard from "../components/AwardsCard";
 import "../utils/Home.css";
 import AnimatedButton from "../components/AnimatedButton";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const slides = [homeBanner1, homeBanner1, homeBanner1];
@@ -72,6 +73,8 @@ export default function Home() {
     awardCard,
     awardCard,
   ]);
+  const navigate = useNavigate()
+  const goToSearchHousePage=()=>navigate('/download-pariwar-nakal')
   useEffect(() => {
     const updateAwardCards = () => {
       const isSmallScree = window.innerWidth < 1024;
@@ -120,7 +123,7 @@ export default function Home() {
               className=" absolute -right-4 z-10 h-full"
             />
           </div>
-          <button className="ml-6 bg-primary text-white p-2 rounded-xl">
+          <button onClick={goToSearchHousePage}  className="ml-6 bg-primary text-white p-2 rounded-xl">
             Download Pariwar Nakal
           </button>
           {/* <div className="overflow-hidden relative w-full ">
@@ -339,7 +342,7 @@ export default function Home() {
           </Slide>
         </div>
       </section>
-      <button className="fixed -mt-4  bottom-8 right-5 z-10  p-3 px-5 bg-black text-white rounded-2xl">
+      <button onClick={goToSearchHousePage}  className="fixed -mt-4  bottom-8 right-5 z-10  p-3 px-5 bg-black text-white rounded-2xl">
         Download Pariwar Nakal
       </button>
     </div>
