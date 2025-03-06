@@ -30,9 +30,10 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { LanguageContext } from "../contexts/LanguageContext";
 export default function Location({ active = "/Unknow" }) {
   const API_URL = import.meta.env.VITE_API_URL;
-  const tableHeaders = [
+  const hindiTableHeaders = [
     "Øe la-",
     "edku uEcj",
     "ifjokj ds eqf[k;k dk uke",
@@ -45,13 +46,30 @@ export default function Location({ active = "/Unknow" }) {
     "lk{kj ;k fuj{kj ¼lk{kj gksus dh n'kk esa vgZrk vkSj C;kSjk½",
     "lfdZy NksM+ nsus ;k e`R;q dk fnukad",
     "vH;qfDr",
+    "eksckby u0"
   ];
+  const englishTableHeaders = [
+    "SL NO.",
+    "House No.",
+    "House Owner's Name",
+    "Name",
+    "Father/Husband Name",
+    "Male or Female",
+    "Caste",
+    "Date of Birth",
+    "Occupation",
+    "Education",
+    "Date of death",
+    "Complaints",
+    "Mobile No."
+  ]
   function cleanText(input) {
     let cleaned = input.replace(/^\/+/, "").replace(/-/g, " ");
     cleaned = cleaned.replace(/\b\w/g, (char) => char.toUpperCase());
     return cleaned;
   }
   const { user, setUser } = useContext(AuthContext);
+  const {language} = useContext(LanguageContext)
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const navigate = useNavigate();
@@ -67,7 +85,7 @@ export default function Location({ active = "/Unknow" }) {
     const uploadFile = () => {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${API_URL}/upload-excel/hindi`, formData, {
+          .post(`${API_URL}/upload-excel/${language}`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `bearer ${user.token}`,
@@ -139,7 +157,7 @@ export default function Location({ active = "/Unknow" }) {
       abhiyukti,
     };
     try {
-      const response = await axios.post(`${API_URL}/add-one/hindi`, data, {
+      const response = await axios.post(`${API_URL}/add-one/${language}`, data, {
         headers: `bearer ${user.token}`,
       });
       if (response.status === 200) {
@@ -290,6 +308,7 @@ export default function Location({ active = "/Unknow" }) {
               <PopoverCloseButton />
               <PopoverHeader>Select excel file</PopoverHeader>
               <PopoverBody>
+                <p className="text-red-600 opacity-75 mb-2">*Please cross check the language before uploading</p>
                 <form onSubmit={handleExcelSubmit}>
                   <input type="file" accept=".xlx, .xlsx" required />
                   <br />
@@ -312,14 +331,15 @@ export default function Location({ active = "/Unknow" }) {
           <ModalHeader>Add Single Data</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+          <p className="text-red-600 opacity-75 mb-2">*Please cross check the language before uploading</p>
             <form
               onSubmit={handleSingleDataSubmit}
               className="grid grid-cols-2"
             >
-              {tableHeaders.map(
+              {(language ==='english' ? englishTableHeaders :  hindiTableHeaders).map(
                 (ele, index) =>
                   index !== 0 && (
-                    <div key={index} className="font-kruti_dev text-xl my-1">
+                    <div key={index} className={`${language==='hindi' && "font-kruti_dev" } text-xl my-1`}>
                       <label>{ele}</label>
                       <br />
                       <input

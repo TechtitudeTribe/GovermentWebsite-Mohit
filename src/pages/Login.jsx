@@ -35,7 +35,7 @@ export default function Login() {
       return;
     }
     try {
-      const response = await axios.post(`${API_URL}/login`, {
+      const response = await axios.post(`${API_URL}/auth/login`, {
         email,
         password,
       });
@@ -51,9 +51,11 @@ export default function Login() {
       }
     } catch (error) {
       if (user) setUser(null);
-      setMessage(error.response.data.message);
+      setMessage(error.response?.data.message||error.message);
+    }finally{
+
+      setLoading(false);
     }
-    setLoading(false);
     
   };
   return (

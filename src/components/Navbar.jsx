@@ -56,7 +56,7 @@ export default function Navbar({ active }) {
     <section className="">
       <div className="min-[520px]:flex justify-between items-center   bg-white p-4 lg:px-16">
         <div className="flex gap-2 items-center">
-          <img src={logo} alt="logo" className="h-10 max-[520px]:m-auto" />
+          <img src={logo} alt="logo" className="h-12 max-[520px]:m-auto" />
           <div className="text-blue-600 ">
             <h3 className="text-lg font-semibold">Panchayati Raj Department</h3>
             <p className="text-sm">Government of Uttar Pradesh</p>

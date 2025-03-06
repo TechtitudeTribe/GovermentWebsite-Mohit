@@ -1,4 +1,4 @@
-import logo from "/logo.png";
+import logo from "/up-gov-logo.svg";
 import facebookIcon from "/facebook.svg";
 import twitterIcon from "/twitter.svg";
 import { NavLink } from "react-router-dom";
@@ -30,7 +30,13 @@ export default function Footer({active}) {
     <div className="">
       <section className="min-[480px]:grid grid-cols-4 gap-20 p-6 min-[800px]:px-20">
         <div className="col-span-2">
-          <img src={logo} alt="logo" className="my-4 h-14"/>
+        <div className="flex gap-2 items-center">
+          <img src={logo} alt="logo" className="h-12 max-[520px]:m-auto" />
+          <div className="text-blue-600 ">
+            <h3 className="text-lg font-semibold">Panchayati Raj Department</h3>
+            <p className="text-sm">Government of Uttar Pradesh</p>
+          </div>
+        </div>
           <p className="font-medium my-4">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim

@@ -24,7 +24,7 @@ function App() {
   const verifyLogin = async ()=>{
     if(!user) return
     try {
-      const response = await axios.post(`${API_URL}/verify-login`,null,{headers :{
+      const response = await axios.post(`${API_URL}/auth/verify-login`,null,{headers :{
         authorization :`bearer ${user.token}`
       }})
       if(response.status === 200) return

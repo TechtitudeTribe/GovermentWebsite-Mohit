@@ -14,14 +14,12 @@ import {
   Button,
   Text,
   Box,
-  useToast,
   Spinner,
 } from "@chakra-ui/react";
 import excelDateToJSDate from "../helpers/excelToJSDate";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { krutiBase64 } from "../assets/Kruti-Base64";
-import { AuthContext } from "../contexts/AuthContext";
 import { LanguageContext } from "../contexts/LanguageContext";
 export default function SearchHouse() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -31,11 +29,9 @@ export default function SearchHouse() {
   const [searchValue, setSearchValue] = useState("");
   const [state, setState] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const { user } = useContext(AuthContext);
   const { language } = useContext(LanguageContext);
-  // const toast = useToast();
 
-  const tableHeadersHindi = [
+  const hindiTableHeaders = [
     "Øe la-",
     "edku uEcj",
     "ifjokj ds eqf[k;k dk uke",
@@ -48,8 +44,9 @@ export default function SearchHouse() {
     "lk{kj ;k fuj{kj ¼lk{kj gksus dh n'kk esa vgZrk vkSj C;kSjk½",
     "lfdZy NksM+ nsus ;k e`R;q dk fnukad",
     "vH;qfDr",
+    "eksckby u0"
   ];
-  const tableHeadersEnglish = [
+  const englishTableHeaders = [
     "SL NO.",
     "House No.",
     "House Owner's Name",
@@ -62,6 +59,7 @@ export default function SearchHouse() {
     "Education",
     "Date of death",
     "Complaints",
+    "Mobile No."
   ];
   const handleSubmit = async (event = null) => {
     if (event) {
@@ -196,7 +194,7 @@ export default function SearchHouse() {
     ]);
     autoTable(pdf, {
       head:language === "hindi"
-      ? [[...tableHeadersHindi]] : [[...tableHeadersEnglish]],
+      ? [[...hindiTableHeaders]] : [[...englishTableHeaders]],
       body: [...tableData1],
       startY: currentY + 5,
 
@@ -406,7 +404,7 @@ export default function SearchHouse() {
                   <thead className="border-2 border-black whitespace-nowrap lg:whitespace-normal">
                     <tr className=" border-2 border-black">
                       {language === "hindi"
-                        ? tableHeadersHindi.map((ele, i) => (
+                        ? hindiTableHeaders.map((ele, i) => (
                             <th
                               key={i}
                               className="p-1  font-kruti_dev border-2 border-black"
@@ -414,7 +412,7 @@ export default function SearchHouse() {
                               <p className=" text-xl ">{ele}</p>
                             </th>
                           ))
-                        : tableHeadersEnglish.map((ele, i) => (
+                        : englishTableHeaders.map((ele, i) => (
                             <th key={i} className="p-1 border-2 border-black">
                               <p>{ele}</p>
                             </th>
