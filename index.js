@@ -3,8 +3,6 @@ const express = require("express");
 require("dotenv").config();
 const multer = require("multer");
 const xlsx = require("xlsx");
-const jwt = require("jsonwebtoken");
-// const db = require("./config/firebase");
 const cors = require("cors");
 const ValidateLanguage = require("./middlewares/ValidateLanguage");
 const Authenticator = require("./middlewares/Authenticator");
@@ -12,12 +10,17 @@ const Authenticator = require("./middlewares/Authenticator");
 const server = express();
 server.use(express.json());
 server.use(cors());
+
+const AuthRouter = require("./routes/auth.route")
+const AttendanceRouter = require("./routes/attendance.route")
+server.use("/auth",AuthRouter)
+server.use("/attendance",AttendanceRouter)
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 const PORT = process.env.PORT || 3000;
 const BASE_URL = process.env.BASE_URL;
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+
 
 server.get("/", (req, res) => {
   res.send("Hello");
@@ -42,6 +45,19 @@ server.get("/all-data/:language", ValidateLanguage, async (req, res) => {
       .json({ message: "Error : Internal server error please try again" });
   }
 });
+server.get("/get-one/:language/:id",ValidateLanguage,async(req,res)=>{
+  const {language,id} = req.params
+  try {
+    const response = await axios.get(`${BASE_URL}/${language}/${id}.json`)
+    if(!response.data){
+      return res.status(404).json({message:"Data not found"})
+    }else{
+      res.json({message:"Request resolved",data:response.data})
+    }
+  } catch (error) {
+    res.status(500).json({message:error.message})
+  }
+})
 server.post("/add-one/:language", ValidateLanguage, async (req, res) => {
   const language = req.params.language;
   const {
@@ -183,6 +199,7 @@ server.post("/upload-excel/:language", ValidateLanguage,Authenticator,upload.sin
               shachhar: row.shachhar || "",
               death_date: row.death_date || "",
               abhiyukti: row.abhiyukti || "",
+              mobile_no: row.mobile_no || ""
             };
           });
         if (isInvalid) {
@@ -194,8 +211,9 @@ server.post("/upload-excel/:language", ValidateLanguage,Authenticator,upload.sin
           try {
 
             const promises = data.map(async (doc) => {
-              const response = await axios.post(
-                `${BASE_URL}/${language}.json`,
+              const id = `UP_BIJNOR_GPDHAMPURA_${doc.house_no}_${doc.dob}`
+              const response = await axios.put(
+                `${BASE_URL}/${language}/${id}.json`,
                 doc
               );
               return response;
@@ -246,63 +264,7 @@ server.get("/search/:language/:field/", ValidateLanguage, async (req, res) => {
     }
   }
 });
-server.post("/login", async (req, res) => {
-  const { email, password } = req.body;
 
-  if (!email || !password) {
-    res
-      .status(400)
-      .json({ message: "Please provide valid email and password" });
-  } else {
-    try {
-      const response = await axios.get(`${BASE_URL}/admins.json`);
-      const foundAdmin = Object.entries(response.data)
-        .map(([id, user]) => ({ id: id, ...user }))
-        .filter((user) => user.email === email);
-      if (!foundAdmin[0]) {
-        res
-          .status(404)
-          .json({ message: `No admin associated with email -  ${email}` });
-      } else {
-        if (password !== foundAdmin[0].password) {
-          res
-            .status(401)
-            .json({ message: "Wrong password, please try again." });
-        } else {
-          try {
-            jwt.sign(
-              { id: foundAdmin[0].id, email },
-              JWT_SECRET_KEY,
-              { expiresIn: "30m" },
-              (err, token) => {
-                if (err) {
-                  res
-                    .status(500)
-                    .json({ message: "Login failed, Internal server error!!" });
-                } else {
-                  res.json({
-                    message: "Login success",
-                    isLoggedIn: true,
-                    email,
-                    token,
-                  });
-                }
-              }
-            );
-          } catch (error) {
-            res
-              .status(500)
-              .json({ message: "Internal server error, please try again" });
-          }
-        }
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Internal server error, please try again" });
-    }
-  }
-});
 server.patch("/update-one/:language/:id",ValidateLanguage,async (req, res) => {
     const isEmpty = (obj) => {
       return Object.keys(obj).length === 0;
@@ -364,30 +326,17 @@ server.delete("/delete-one/:language/:id", ValidateLanguage,async (req, res) => 
     const id = req.params.id;
     const language = req.params.language;
     const URL = `${BASE_URL}/${language}/${id}.json`;
-    try {
-      const response = await axios.get(URL);
-      if (!response.data) {
-        res.status(404).json({ message: `No data found with the id - ${id}` });
-      } else {
         try {
-          const deleteResponse = await axios.delete(URL);
-          res.json({ messgae: "Data deleted" });
+          await axios.delete(URL);
+          res.json({ message: "Data deleted" });
         } catch (error) {
           res
             .status(500)
             .json({ message: "Internal server error,while deletig data" });
         }
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Internal server error,while finding data with id " });
-    }
   }
 );
-server.post("/verify-login", Authenticator, (req, res) => {
-  res.json({ message: "Token is active" });
-});
+
 server.get("*", (req, res) => {
   res.status(404).json({ message: "404 Not Found, Unknown get request." });
 });
