@@ -17,7 +17,7 @@ function getCurrentDateInfo() {
   
 AttendanceRouter.post("/", async (req, res) => {
   try {
-    const { house_no, house_owner, attended_by } = req.body || {};
+    const { house_no, house_owner, attended_by,date } = req.body || {};
     if (!house_no || !house_owner || !attended_by)
       return res.status(400).json({ message: "Invalid request body" });
     const curretDate = getCurrentDateInfo()
@@ -25,7 +25,7 @@ AttendanceRouter.post("/", async (req, res) => {
       house_no,
       house_owner,
       attended_by,
-      date: Date(),
+      date: date ||Date(),
     });
     return res.json({ message: "Attendance Registered" });
   } catch (error) {
