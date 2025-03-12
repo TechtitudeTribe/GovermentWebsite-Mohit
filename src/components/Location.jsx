@@ -92,11 +92,9 @@ export default function Location({ active = "/Unknow" }) {
             },
           })
           .then((response) => {
-            //  console.log(response);
             resolve(response);
           })
           .catch((error) => {
-            console.log(error);
             if (error.response.status === 401) {
               setUser(null);
               navigate("/login");
@@ -298,7 +296,7 @@ export default function Location({ active = "/Unknow" }) {
         Home &gt; {cleanText(active)}{" "}
       </h4>
       {active === "/dashboard" && user && (
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           <Popover>
             <PopoverTrigger>
               <Button colorScheme="green">Upload Excel File</Button>
