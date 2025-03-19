@@ -6,13 +6,16 @@ const xlsx = require("xlsx");
 const cors = require("cors");
 const ValidateLanguage = require("./middlewares/ValidateLanguage");
 const Authenticator = require("./middlewares/Authenticator");
+const pool = require("./config/postgres");
 
 const server = express();
 server.use(express.json());
 server.use(cors());
 
 const AuthRouter = require("./routes/auth.route")
-const AttendanceRouter = require("./routes/attendance.route")
+const AttendanceRouter = require("./routes/attendance.route");
+const createAttendanceTable = require("./models/attendance.model");
+const createAdminTable = require("./models/admin.model");
 server.use("/auth",AuthRouter)
 server.use("/attendance",AttendanceRouter)
 const storage = multer.memoryStorage();
@@ -265,7 +268,7 @@ server.get("/search/:language/:field/", ValidateLanguage, async (req, res) => {
   }
 });
 
-server.patch("/update-one/:language/:id",ValidateLanguage,async (req, res) => {
+server.patch("/update-one/:language/:id",ValidateLanguage,Authenticator,async (req, res) => {
     const isEmpty = (obj) => {
       return Object.keys(obj).length === 0;
     };
@@ -322,7 +325,7 @@ server.patch("/update-one/:language/:id",ValidateLanguage,async (req, res) => {
     }
   }
 );
-server.delete("/delete-one/:language/:id", ValidateLanguage,async (req, res) => {
+server.delete("/delete-one/:language/:id", ValidateLanguage,Authenticator,async (req, res) => {
     const id = req.params.id;
     const language = req.params.language;
     const URL = `${BASE_URL}/${language}/${id}.json`;
@@ -343,4 +346,15 @@ server.get("*", (req, res) => {
 server.post("*", (req, res) => {
   res.status(404).json({ message: "404 Not Found, Unknown post request." });
 });
-server.listen(PORT, () => console.log(`Server running on Port ${PORT}`));
+server.listen(PORT, async() =>{ 
+  
+  console.log(`Server running on Port ${PORT}`)
+try {
+  await pool.connect()
+  await createAttendanceTable()
+  await createAdminTable()
+  console.log('PostgreSQL Connected')
+} catch (error) {
+  console.log("Failed to connect to PostgreSQL")
+}
+});
