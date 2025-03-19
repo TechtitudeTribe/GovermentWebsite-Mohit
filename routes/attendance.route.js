@@ -1,36 +1,40 @@
-const { default: axios } = require("axios");
 require("dotenv").config();
-const BASE_URL = process.env.BASE_URL;
 const AttendanceRouter = require("express").Router();
-function getCurrentDateInfo() {
-    const today = new Date();
-    
-    const year = today.getFullYear(); // Get the current year
-    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Get the current month as a number (0-indexed, so we add 1) and format as two digits
-    const date = today.getDate().toString().padStart(2, '0'); // Get the current day of the month and pad it to 2 digits if necessary
-    
-    return [year.toString(), month, date];
-  }
-  
-  
-  
-  
-AttendanceRouter.post("/", async (req, res) => {
-  try {
-    const { house_no, house_owner, attended_by,date } = req.body || {};
-    if (!house_no || !house_owner || !attended_by)
-      return res.status(400).json({ message: "Invalid request body" });
-    const curretDate = getCurrentDateInfo()
-    await axios.post(`${BASE_URL}/attendance/${curretDate[0]}/${curretDate[1]}/${curretDate[2]}.json`, {
+const pool = require("../config/postgres")
+// const Authenticator = require("../middlewares/Authenticator")
+AttendanceRouter.get("/", async (req, res) => {
+    try {
+      const { start, end, date, house_no } = req.query;
+      if((!start || !end) && !date) return res.status(400).json({message:"Invalid query"})
+      let query = `SELECT 
+      attended_by,
       house_no,
       house_owner,
-      attended_by,
-      date: date ||Date(),
-    });
-    return res.json({ message: "Attendance Registered" });
-  } catch (error) {
-   return res.status(500).json({ message: error.message });
-  }
-});
-
+      TO_CHAR(date_time, 'YYYY-MM-DD') AS date,
+      TO_CHAR(date_time, 'HH12:MI:SS AM') AS time --add/remove 'AM' after SS for AM/PM
+      FROM attendance`;
+      if (start && end) query += ` WHERE date_time >= '${start}' AND date_time < '${end}'`;
+      else if (date) query += ` WHERE DATE(date_time) = '${date}'`;
+      if (house_no) query += ` AND house_no = ${house_no} ;`;
+      const response = await pool.query(query);
+      if(response.rows[0]) res.send(response.rows);
+      else res.status(404).json({message:"No data found with provided date or house_no"})
+      
+    } catch (error) {
+      res.status(500).json({message:error.message})
+    }
+  });
+  
+AttendanceRouter.post("/",async(req,res)=>{
+    try {
+      const {attended_by,house_no,house_owner,date_time} = req.body
+      if(!attended_by || !house_no || !house_owner || !date_time ) return res.status(400).json({message:"Invalid request body"})
+        let query = `INSERT INTO attendance (attended_by,house_no,house_owner,date_time) VALUES ($1, $2, $3, $4)`;
+      const response = await pool.query(query,[attended_by,house_no,house_owner,date_time])
+      return res.json({message:`Attendance added for house_no ${house_no} by ${attended_by}`})
+    } catch (error) {
+      res.status(500).json({message:error.message})
+    }
+  
+  })
 module.exports = AttendanceRouter;
