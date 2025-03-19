@@ -16,6 +16,8 @@ const AuthRouter = require("./routes/auth.route")
 const AttendanceRouter = require("./routes/attendance.route");
 const createAttendanceTable = require("./models/attendance.model");
 const createAdminTable = require("./models/admin.model");
+const createEnglishDataTable = require("./models/englishData.model");
+const createHindiDataTable = require("./models/hindiData.model");
 server.use("/auth",AuthRouter)
 server.use("/attendance",AttendanceRouter)
 const storage = multer.memoryStorage();
@@ -353,8 +355,11 @@ try {
   await pool.connect()
   await createAttendanceTable()
   await createAdminTable()
+  await createEnglishDataTable()
+  await createHindiDataTable()
   console.log('PostgreSQL Connected')
 } catch (error) {
+  console.log(error)
   console.log("Failed to connect to PostgreSQL")
 }
 });
