@@ -1,10 +1,10 @@
 const AuthRouter = require("express").Router();
 const Authenticator = require("../middlewares/Authenticator");
 const jwt = require("jsonwebtoken");
-const { default: axios } = require("axios");
+const pool = require("../config/postgres");
 require("dotenv").config();
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
-const BASE_URL = process.env.BASE_URL;
+
 AuthRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -14,23 +14,25 @@ AuthRouter.post("/login", async (req, res) => {
       .json({ message: "Please provide valid email and password" });
   } else {
     try {
-      const response = await axios.get(`${BASE_URL}/admins.json`);
-      const foundAdmin = Object.entries(response.data)
-        .map(([id, user]) => ({ id: id, ...user }))
-        .filter((user) => user.email === email);
-      if (!foundAdmin[0]) {
+      const query = `
+      SELECT email, password
+      FROM admin
+      WHERE email = $1;
+  `;
+      const response = await pool.query(query, [email]);
+      if (response.rowCount < 1) {
         res
           .status(404)
           .json({ message: `No admin associated with email -  ${email}` });
       } else {
-        if (password !== foundAdmin[0].password) {
+        if (password !== response.rows[0].password) {
           res
             .status(401)
             .json({ message: "Wrong password, please try again." });
         } else {
           try {
             jwt.sign(
-              { id: foundAdmin[0].id, email },
+              { email, date: Date.now() },
               JWT_SECRET_KEY,
               { expiresIn: "30m" },
               (err, token) => {
@@ -49,7 +51,6 @@ AuthRouter.post("/login", async (req, res) => {
               }
             );
           } catch (error) {
-            
             res
               .status(500)
               .json({ message: "Internal server error, please try again" });
@@ -57,7 +58,7 @@ AuthRouter.post("/login", async (req, res) => {
         }
       }
     } catch (error) {
-        console.log(error)
+      console.log(error);
       res
         .status(500)
         .json({ message: "Internal server error, please try again" });
@@ -68,4 +69,4 @@ AuthRouter.post("/verify-login", Authenticator, (req, res) => {
   res.json({ message: "Token is active" });
 });
 
-module.exports = AuthRouter
+module.exports = AuthRouter;
