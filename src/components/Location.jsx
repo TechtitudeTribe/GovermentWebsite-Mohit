@@ -85,7 +85,7 @@ export default function Location({ active = "/Unknow" }) {
     const uploadFile = () => {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${API_URL}/upload-excel/${language}`, formData, {
+          .post(`${API_URL}/data/${language}/upload-excel`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `bearer ${user.token}`,
@@ -111,7 +111,7 @@ export default function Location({ active = "/Unknow" }) {
       },
       success: (response) => ({
         title: "Upload Successful",
-        description: `${response.data.data.length} data added successfully.`,
+        description: `${response.data.insertedRows} data added successfully, ${response.data.duplicateRows>0 ? `${response.data.duplicateRows} duplicates ignored` : "No duplicates"}`,
         position: "top",
         duration: 5000,
       }),
@@ -155,10 +155,10 @@ export default function Location({ active = "/Unknow" }) {
       abhiyukti,
     };
     try {
-      const response = await axios.post(`${API_URL}/add-one/${language}`, data, {
-        headers: `bearer ${user.token}`,
+      await axios.post(`${API_URL}/data/${language}/add-one`, data, {
+        headers: {Authorization:`bearer ${user.token}`},
       });
-      if (response.status === 200) {
+      onClose()
         toast({
           position: "top",
           duration: 5000,
@@ -173,14 +173,14 @@ export default function Location({ active = "/Unknow" }) {
                   {" "}
                   <Text
                     as="span"
-                    className="font-kruti_dev text-xl font-semibold"
+                    className={`${language === 'hindi' &&"font-kruti_dev "} text-xl font-semibold`}
                   >
                     {name}
                   </Text>{" "}
                   added to house no {house_no} with house owner{" "}
                   <Text
                     as="span"
-                    className="font-kruti_dev text-xl font-semibold"
+                    className={`${language === 'hindi' &&"font-kruti_dev "} text-xl font-semibold`}
                   >
                     {house_owner}
                   </Text>
@@ -189,15 +189,7 @@ export default function Location({ active = "/Unknow" }) {
             </Alert>
           ),
         });
-      } else {
-        toast({
-          title: "Unknow error, please try again.",
-          position: "top",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-      }
+
     } catch (error) {
       if (!error.response) {
         toast({
@@ -208,7 +200,7 @@ export default function Location({ active = "/Unknow" }) {
           isClosable: true,
         });
       } else {
-        if (error.response.status === 401) {
+        if (error.status === 401) {
           toast({
             title: "You are not authorized to add data.",
             description: "Please login and try again",
@@ -217,7 +209,7 @@ export default function Location({ active = "/Unknow" }) {
             duration: 5000,
             isClosable: true,
           });
-        } else if (error.response.status === 409) {
+        } else if (error.status === 409) {
           if (error.response.data.existingHouseOwner) {
             toast({
               position: "top",
@@ -233,7 +225,7 @@ export default function Location({ active = "/Unknow" }) {
                       {error.response.data.message}{" "}
                       <Text
                         as="span"
-                        className="font-kruti_dev text-xl font-semibold"
+                       className={`${language === 'hindi' &&"font-kruti_dev "} text-xl font-semibold`}
                       >
                         {error.response.data.existingHouseOwner}
                       </Text>
@@ -257,7 +249,7 @@ export default function Location({ active = "/Unknow" }) {
                       {" "}
                       <Text
                         as="span"
-                        className="font-kruti_dev text-xl font-semibold"
+                       className={`${language === 'hindi' &&"font-kruti_dev "} text-xl font-semibold`}
                       >
                         {name}
                       </Text>{" "}
@@ -265,7 +257,7 @@ export default function Location({ active = "/Unknow" }) {
                       house owner{" "}
                       <Text
                         as="span"
-                        className="font-kruti_dev text-xl font-semibold"
+                       className={`${language === 'hindi' &&"font-kruti_dev "} text-xl font-semibold`}
                       >
                         {house_owner}
                       </Text>
@@ -278,7 +270,7 @@ export default function Location({ active = "/Unknow" }) {
         } else {
           toast({
             title: "Failed to add data.",
-            description: "Error in server, please try again",
+            description: error.response?.data.message|| "Error in server, please try again",
             position: "top",
             status: "error",
             duration: 5000,

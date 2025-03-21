@@ -111,3 +111,13 @@ outline: none;
     -webkit-appearance: none;
     margin: 0;
 }
+
+.react-calendar__navigation{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+.react-calendar__month-view__weekdays{
+  padding: 10px;
+
+}

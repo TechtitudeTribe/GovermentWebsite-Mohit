@@ -16,6 +16,7 @@ import SearchHouse from './pages/SearchHouse'
 import Dashboard from './pages/Dashboard'
 import { AuthContext } from './contexts/AuthContext'
 import axios from 'axios'
+import Attendance from './pages/Attendance'
 
 function App() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -63,6 +64,7 @@ const UpdateRoute = ()=>{
       <Route path='/login' element={<Login/>}/>
       <Route path='/download-pariwar-nakal' element={<SearchHouse/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
+      <Route path='/attendance' element={<Attendance/>}/>
       <Route path='*' element={<InvalidPage/>}/>
     </Routes>
     <Footer active={activeRoute}/>

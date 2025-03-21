@@ -79,25 +79,30 @@ export default function SearchHouse() {
     }
     if (owner) setOwner(null);
     setState({ msg: "Searching...", value: null });
-    const response = await axios.get(
-      `${API_URL}/search/${language}/${searchType}?value=${searchValue}`
-    );
-    const data = response.data.filter((docs) => docs.name === docs.house_owner);
-    if (response.status === 200 && data[0]) {
-      setOwner(data[0]);
-      setTabledata(response.data);
-      setState(null);
-    } else if (response.status === 200 && data.length < 1) {
-      setOwner(null);
-      setState({
-        msg: `No data found associated with ${searchType.split("_").join(" ")}`,
-        value: searchValue,
-      });
-    } else {
+    try {
+      const response = await axios.get(
+        `${API_URL}/data/${language}/search?field=${searchType}&value=${searchValue}`
+      );
+      console.log(response)
+      const data = response.data.data.filter((docs) => docs.name === docs.house_owner);
+      if (data[0]) {
+        setOwner(data[0]);
+        setTabledata(response.data.data);
+        setState(null);
+      } else if ( data.length < 1) {
+        setOwner(null);
+        setState({
+          msg: `No data found associated with ${searchType.split("_").join(" ")}`,
+          value: searchValue,
+        });
+      } 
+    } catch (error) {
       setOwner(null);
       setTabledata(null);
-      setState({ msg: "Unknow error, please try again!!", value: null });
+      setState({ msg:error.response?.data.message|| "Unknow error, please try again!!", value: null });
     }
+
+    
   };
 
   const downloaddPDF = () => {
@@ -395,7 +400,7 @@ export default function SearchHouse() {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody overflow={"auto"}>
-            {tabledata[0] ? (
+            {tabledata ? (
               <>
                 <table
                   id="pariwar-table"

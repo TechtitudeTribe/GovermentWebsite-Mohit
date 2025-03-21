@@ -32,6 +32,7 @@ import blankQRCode from "/blank-qr.webp";
 export default function Dashboard() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { user } = useContext(AuthContext);
+
   const { language } = useContext(LanguageContext);
   const navigate = useNavigate();
   const [state, setState] = useState({ message: "Loading...", status: false });
@@ -92,19 +93,9 @@ export default function Dashboard() {
     setIsDeleting(true);
     if (formData.name === formData.house_owner) {
       try {
-        const allData = tableData.filter(
-          (ele) => ele.house_owner === formData.house_owner
+        await axios.delete(
+          `${API_URL}/data/delete-by-house/${formData.house_no}`,{headers:{Authorization:`Bearer ${user.token}`}}
         );
-        const promises = allData.map(async (ele) => {
-          const hindiResponse = await axios.delete(
-            `${API_URL}/delete-one/hindi/${ele.id}`
-          );
-          const englishResponse = await axios.delete(
-            `${API_URL}/delete-one/english/${ele.id}`
-          );
-          return hindiResponse , englishResponse;
-        });
-        await Promise.all(promises);
         toggleSynce();
         toast({
           title: `All members with house no ${formData.house_no} has been deleted`,
@@ -124,14 +115,9 @@ export default function Dashboard() {
       }
     } else {
       try {
-        const promises= [] 
-        promises.push(await axios.delete(
-          `${API_URL}/delete-one/hindi/${formData.id}`
-        )) 
-        promises.push(await axios.delete(
-          `${API_URL}/delete-one/english/${formData.id}`
-        )) 
-        await Promise.all(promises)
+        await axios.delete(
+          `${API_URL}/data/delete/${formData.id}`,{headers:{Authorization:`Bearer ${user.token}`}}
+        )
           toast({
             title: "Data deleted",
             status: "success",
@@ -143,7 +129,7 @@ export default function Dashboard() {
 
       } catch (/* eslint-disable-line no-unused-vars */ error) {
         toast({
-          title: "Failed to delete data",
+          title:error.response?.data.message|| "Failed to delete data",
           description: "Please Try again.",
           status: "error",
           position: "top",
@@ -165,8 +151,8 @@ export default function Dashboard() {
 
     try {
       const response = await axios.patch(
-        `${API_URL}/update-one/hindi/${formData.id}`,
-        formData
+        `${API_URL}/data/${language}/update-one/${formData.id}`,
+        formData,{headers:{Authorization:`Bearer ${user.token}`}}
       );
       if (response.status === 200) {
         toast({
@@ -194,7 +180,7 @@ export default function Dashboard() {
     setTableData([]);
     setState({ message: "Loading...", description: "", status: false });
     try {
-      const response = await axios.get(`${API_URL}/all-data/${language}`);
+      const response = await axios.get(`${API_URL}/data/${language}/get-all`,{headers:{Authorization:`Bearer ${user.token}`}});
       if (response.status === 200) {
         let data = response.data;
         data.sort((a, b) => a.house_no - b.house_no);
@@ -287,12 +273,13 @@ export default function Dashboard() {
       return;
     }
     getData();
+    //eslint-disable-next-line
   }, [sync, user, language]);
 
   const generatePDF = async (data) => {
     try {
       if(language === 'hindi'){
-        const response = await axios.get(`${API_URL}/get-one/english/${data.id}`)
+        const response = await axios.get(`${API_URL}/data/english/get-one/${data.id}`,{headers:{Authorization:`Bearer ${user.token}`}})
         data = {...data,...response.data.data}
       }
       const qrCodeDataUrl = await QRCode.toDataURL(
@@ -343,8 +330,8 @@ export default function Dashboard() {
     }
   };
   return (
-    <div className="p-10 bg-mid_gray">
-      <h3 className="text-6xl text-center py-4">Dashboard</h3>
+    <div className="p-4 sm:p-10 bg-mid_gray">
+      <h3 className="text-4xl sm:text-6xl text-center py-4">Dashboard</h3>
 
       <div className="bg-white rounded-t-3xl rounded mt-4 overflow-x-auto">
         <div className="flex justify-between items-center  p-4 border-b border-gray-500">
@@ -358,14 +345,14 @@ export default function Dashboard() {
           </button>
         </div>
         {tableData[0] ? (
-          <table className="  table-auto text-center text">
+          <table className="table-auto text-center">
             <thead className="  whitespace-nowrap lg:whitespace-normal">
               <tr className="border-b-2 border-black">
                 {(language === "english"
                   ? englishTableHeaders
                   : hindiTableHeaders
                 ).map((ele, i) => (
-                  <th key={i}>
+                  <th key={i} className="px-2">
                     <p
                       className={`${
                         language === "hindi" && "font-kruti_dev text-xl "
@@ -376,8 +363,8 @@ export default function Dashboard() {
                   </th>
                 ))}
                 <th>QR Code</th>
-                {user && <th>Delete</th>}
-                {user && <th>Edit</th>}
+                {user && <th className="px-2">Delete</th>}
+                {user && <th className="px-2">Edit</th>}
               </tr>
             </thead>
             <tbody className=" ">
@@ -469,7 +456,7 @@ export default function Dashboard() {
                         />
                         <button
                           onClick={() => generatePDF(element)}
-                          className="absolute top-2/4 -translate-y-2/4 left-2/4 -translate-x-2/4 bg-secondary text-white text-xs w-full py-px"
+                          className="absolute top-2/4 -translate-y-2/4 left-2/4 -translate-x-2/4 bg-secondary text-white text-xs min-w-fit p-px"
                         >
                           Download
                         </button>
@@ -597,12 +584,12 @@ export default function Dashboard() {
 
       <Modal isOpen={isEditModalOpen} onClose={onEditModalClose} size={"xl"}>
         <ModalOverlay />
-        <ModalContent minW={"50vw"}>
+        <ModalContent minW={"60vw"} maxW={'100vw'} w={'fit-content'}>
           <ModalHeader>Edit Form</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form
-              className="grid grid-cols-2 items-center"
+              className="sm:grid grid-cols-2 items-center gap-2"
               onSubmit={handleEditSubmit}
             >
               {Object.entries(formData).map(
@@ -623,7 +610,7 @@ export default function Dashboard() {
                           }))
                         }
                         className={`${
-                          (index === 1 ||
+                         language === 'hindi' && (index === 1 ||
                             index === 5 ||
                             index === 6 ||
                             index === 8 ||
