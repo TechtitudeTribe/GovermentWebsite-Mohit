@@ -15,30 +15,33 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
+import { LanguageContext } from "../contexts/LanguageContext";
+/*eslint-disable react/prop-types*/
 export default function Navbar({ active }) {
   const [isOpen, setIsOpen] = useState(false);
   const { user, setUser } = useContext(AuthContext);
+  const {language} = useContext(LanguageContext)
   const { isOpen:isModalOpen, onOpen:onModalOpen, onClose:onModalClose } = useDisclosure()
   const toast = useToast()
   const routes = [
     {
-      title: "HOME",
+      title: { english: "HOME", hindi: "मुख्य पृष्ठ" },
       path: "/",
     },
     {
-      title: "ABOUT US",
+      title: { english: "ABOUT US", hindi: "हमारे बारे में" },
       path: "/about-us",
     },
     {
-      title: "PRODUCT",
+      title: { english: "PRODUCT", hindi: "उत्पाद" },
       path: "/product",
     },
     {
-      title: "MEDIA",
+      title: { english: "MEDIA", hindi: "संचार माध्यम पृष्ठ" },
       path: "/media",
     },
     {
-      title: "CONTACT US",
+      title: { english: "CONTACT US", hindi: "संपर्क करें" },
       path: "/contact-us",
     },
   ];
@@ -58,17 +61,21 @@ export default function Navbar({ active }) {
         <div className="flex gap-2 items-center">
           <img src={logo} alt="logo" className="h-12 max-[520px]:m-auto" />
           <div className="text-blue-600 ">
-            <h3 className="text-lg font-semibold">Panchayati Raj Department</h3>
-            <p className="text-sm">Government of Uttar Pradesh</p>
+          <h3 className="text-lg font-semibold">
+                {language ==='hindi'?"पंचायती राज विभाग":"Panchayati Raj Department"}
+              </h3>
+              <p className="text-sm">{language==='hindi'?"उत्तर प्रदेश सरकार":"Government of Uttar Pradesh"}</p>
           </div>
         </div>
         <div className="flex justify-center gap-6 text-center font-medium ">
           <div>
-            <p>Gram Panchayat : Dhampura</p>
+            <p>{language==='hindi'?"ग्राम पंचायत : धामपुरा":"Gram Panchayat : Dhampura"}</p>
             <p></p>
           </div>
           <div>
-            <p>Block : Bijnor</p>
+            <p>
+            {language==='hindi'?"ब्लॉक : बिजनौर":"Block : Bijnor"}
+              </p>
           </div>
         </div>
       </div>
@@ -90,7 +97,7 @@ export default function Navbar({ active }) {
           />
           {routes.map((route) => (
             <NavLink
-              key={route.title}
+              key={route.title.english}
               to={route.path}
               className={`${
                 isOpen && "ml-2"
@@ -99,7 +106,7 @@ export default function Navbar({ active }) {
                 "border-b-4 border-primary bg-white bg-opacity-30"
               }`}
             >
-              <h4>{route.title}</h4>
+              <h4>{route.title[language]}</h4>
             </NavLink>
           ))}
         </div>
@@ -110,7 +117,7 @@ export default function Navbar({ active }) {
                 isOpen ? "h-20 " : "h-full  min-[480px]:h-full"
               }  p-1  min-[800px]:p-4 bg-primary  max-[800px]:text-xs`}
             >
-              {!user ? "LOGIN TO DASHBOARD" : "GO TO DASHBOARD"}
+              {!user ? (language ==='hindi'?"डैशबोर्ड पर लॉगिन करें":"LOGIN TO DASHBOARD") : (language ==='hindi'?"डैशबोर्ड पर जाएँ":"GO TO DASHBOARD")}
             </button>
           </NavLink>
         ) :   (user && active === "/dashboard")   &&       <button
