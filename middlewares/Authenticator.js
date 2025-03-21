@@ -6,7 +6,7 @@ const Authenticator = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1] || null;
   
   if (!token) {
-    res.status(401).json({ message: "Please login first" });
+    return res.status(401).json({ message: "Please login first" });
   } else {
     jwt.verify(token, JWT_SECRET_KEY, (err, decoded) => {
       if (err) {

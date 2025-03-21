@@ -8,113 +8,124 @@ const xlsx = require("xlsx");
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-DataRouter.get("/:language/get-all", ValidateLanguage, Authenticator,async (req, res) => {
-  const { language } = req.params;
-  try {
-    const query = `SELECT * FROM ${language}_data`;
-    const response = await pool.query(query);
-    if (response.rowCount === 0) {
-      res.status(404).json({ message: "No data present in database" });
-    } else {
-      res.send(response.rows);
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error please try again" });
-  }
-});
-
-DataRouter.get("/:language/get-one/:id", ValidateLanguage,Authenticator, async (req, res) => {
-  const { language, id } = req.params;
-  try {
-    const query = `SELECT * FROM ${language}_data WHERE id = $1`;
-    const response = await pool.query(query, [id]);
-    if (response.rowCount === 0) {
-      return res.status(404).json({ message: "Data not found" });
-    } else {
-      res.json({ message: "Request resolved", data: response.rows[0] });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-DataRouter.post("/:language/add-one", ValidateLanguage,Authenticator, async (req, res) => {
-  const language = req.params.language;
-  const {
-    house_no,
-    house_owner,
-    name,
-    father_husband_name,
-    gender,
-    cast,
-    dob,
-    occupation,
-    shachhar,
-    death_date,
-    abhiyukti,
-    mobile_no
-  } = req.body;
-  if (!name || !house_no || !house_owner || !dob) {
-    return res
-      .status(400)
-      .json({ message: "Invalid or incomplete data receive" });
-  } else {
+DataRouter.get(
+  "/:language/get-all",
+  ValidateLanguage,
+  Authenticator,
+  async (req, res) => {
+    const { language } = req.params;
     try {
-      const query = `SELECT * FROM ${language}_data WHERE house_no = $1`;
-      const isHouseExist = await pool.query(query, [house_no]);
-      if (isHouseExist.rowCount > 0) {
-        const isDuplicateData = isHouseExist.rows.some(
-          (ele) =>
-            ele.house_no === house_no &&
-            ele.house_owner === house_owner &&
-            ele.name === name &&
-            ele.dob === dob
-        );
-        if (isDuplicateData) {
-          return res.status(409).json({
-            message: `Data already present in database`,
-          });
-        } else if (isHouseExist.rows[0].house_owner !== house_owner) {
-          return res.status(409).json({
-            message: `House no ${house_no} is already associated with house owner ${isHouseExist.rows[0].house_owner}`,
-            existingHouseOwner: isHouseExist.rows[0].house_owner,
-          });
-        }
-      }
-      try {
-        const query = `INSERT INTO ${language}_data
-         (id, house_no, house_owner,  name, father_husband_name, gender, "cast", dob, occupation, shachhar, death_date, abhiyukti, mobile_no) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`;
-        await pool.query(query, [
-          `UP_BIJNOR_GPDHAMPURA_${house_no}_${dob}`,
-          house_no,
-          house_owner,
-          name,
-          father_husband_name,
-          gender,
-          cast,
-          dob,
-          occupation,
-          shachhar,
-          death_date||null,
-          abhiyukti,
-          mobile_no
-        ]);
-        return res.json({
-          message: `${name} added to house no ${house_no}`,
-        });
-      } catch (error) {
-        return res
-          .status(500)
-          .json({ message:error.message});
+      const query = `SELECT * FROM ${language}_data`;
+      const response = await pool.query(query);
+      if (response.rowCount === 0) {
+        return res.status(404).json({ message: "No data present in database" });
+      } else {
+        return res.send(response.rows);
       }
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message:error.message});
+      return res.status(500).json({ message: error.message });
     }
   }
-});
+);
+
+DataRouter.get(
+  "/:language/get-one/:id",
+  ValidateLanguage,
+  Authenticator,
+  async (req, res) => {
+    const { language, id } = req.params;
+    try {
+      const query = `SELECT * FROM ${language}_data WHERE id = $1`;
+      const response = await pool.query(query, [id]);
+      if (response.rowCount === 0) {
+        return res.status(404).json({ message: "Data not found" });
+      } else {
+        return res.json({ message: "Request resolved", data: response.rows[0] });
+      }
+    } catch (error) {
+      return  res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+DataRouter.post(
+  "/:language/add-one",
+  ValidateLanguage,
+  Authenticator,
+  async (req, res) => {
+    const language = req.params.language;
+    const {
+      house_no,
+      house_owner,
+      name,
+      father_husband_name,
+      gender,
+      cast,
+      dob,
+      occupation,
+      shachhar,
+      death_date,
+      abhiyukti,
+      mobile_no,
+    } = req.body;
+    if (!name || !house_no || !house_owner || !dob) {
+      return res
+        .status(400)
+        .json({ message: "Invalid or incomplete data receive" });
+    } else {
+      try {
+        const query = `SELECT * FROM ${language}_data WHERE house_no = $1`;
+        const isHouseExist = await pool.query(query, [house_no]);
+        if (isHouseExist.rowCount > 0) {
+          const isDuplicateData = isHouseExist.rows.some(
+            (ele) =>
+              ele.house_no === house_no &&
+              ele.house_owner === house_owner &&
+              ele.name === name &&
+              ele.dob === dob
+          );
+          if (isDuplicateData) {
+            return res.status(409).json({
+              message: `Data already present in database`,
+            });
+          } else if (isHouseExist.rows[0].house_owner !== house_owner) {
+            return res.status(409).json({
+              message: `House no ${house_no} is already associated with house owner ${isHouseExist.rows[0].house_owner}`,
+              existingHouseOwner: isHouseExist.rows[0].house_owner,
+            });
+          }
+        }
+        try {
+          const query = `INSERT INTO ${language}_data
+         (id, house_no, house_owner,  name, father_husband_name, gender, "cast", dob, occupation, shachhar, death_date, abhiyukti, mobile_no) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`;
+          await pool.query(query, [
+            `UP_BIJNOR_GPDHAMPURA_${house_no}_${dob}`,
+            house_no,
+            house_owner,
+            name,
+            father_husband_name,
+            gender,
+            cast,
+            dob,
+            occupation,
+            shachhar,
+            death_date || null,
+            abhiyukti,
+            mobile_no,
+          ]);
+          return res.json({
+            message: `${name} added to house no ${house_no}`,
+          });
+        } catch (error) {
+          return res.status(500).json({ message: error.message });
+        }
+      } catch (error) {
+        return res.status(500).json({ message: error.message });
+      }
+    }
+  }
+);
 
 function validateRow(row, index) {
   const REQUIRED_FIELDS = ["dob", "gender", "house_no", "house_owner", "name"];
@@ -126,9 +137,14 @@ function validateRow(row, index) {
   });
   return missingFields.length > 0 ? { index: index + 1, missingFields } : null;
 }
-DataRouter.post("/:language/upload-excel", ValidateLanguage,Authenticator, upload.single("file"), async (req, res) => {
+DataRouter.post(
+  "/:language/upload-excel",
+  ValidateLanguage,
+  Authenticator,
+  upload.single("file"),
+  async (req, res) => {
     if (!req.file) {
-      res.status(400).json({ message: "No file uploaded" });
+      return  res.status(400).json({ message: "No file uploaded" });
     } else {
       const language = req.params.language;
       try {
@@ -215,58 +231,54 @@ DataRouter.post("/:language/upload-excel", ValidateLanguage,Authenticator, uploa
           }
 
           await client.query("COMMIT");
-          res.status(200).json({
+          return res.status(200).json({
             message: "File processed successfully",
             insertedRows: newEntries.length,
             duplicateRows: existingIds.size,
           });
         } catch (error) {
           await client.query("ROLLBACK");
-          console.log(error)
           return res.status(500).json({ message: error.message });
         } finally {
           client.release();
         }
       } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
       }
     }
   }
 );
 
 DataRouter.get("/:language/search", ValidateLanguage, async (req, res) => {
-    const { language } = req.params;
-    const { field,value } = req.query;
-    if (
-      (field !== "house_no" && field !== "house_owner") ||
-      !value
-    ) {
-      return res.status(500).json({ message: "Invalid searching query" });
-    } else {
-      const searchValue =
-        field === "house_no" ? Number(value) : String(value);
-        if(!searchValue) return res.status(400).json({message:"Invalid Searching query"})
-      try {
-        const query = `SELECT * FROM ${language}_data WHERE ${field} = $1`;
+  const { language } = req.params;
+  const { field, value } = req.query;
+  if ((field !== "house_no" && field !== "house_owner") || !value) {
+    return res.status(500).json({ message: "Invalid searching query" });
+  } else {
+    const searchValue = field === "house_no" ? Number(value) : String(value);
+    if (!searchValue)
+      return res.status(400).json({ message: "Invalid Searching query" });
+    try {
+      const query = `SELECT * FROM ${language}_data WHERE ${field} = $1`;
 
-        const response = await pool.query(query, [searchValue]);
-        if (response.rowCount === 0)
-          return res.status(404).json({
-            message: `No data found associated with ${field} ${searchValue}`,
-          });
-        else return res.json({ data: response.rows });
-      } catch (error) {
-        return res.status(500).json({
-          message:
-            "Internal server error while getting the data, please try again.",
+      const response = await pool.query(query, [searchValue]);
+      if (response.rowCount === 0)
+        return res.status(404).json({
+          message: `No data found associated with ${field} ${searchValue}`,
         });
-      }
+      else return res.json({ data: response.rows });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
     }
   }
-);
+});
 
-DataRouter.patch("/:language/update-one/:id",ValidateLanguage,Authenticator,async (req, res) => {
-    const { id,language } = req.params;
+DataRouter.patch(
+  "/:language/update-one/:id",
+  ValidateLanguage,
+  Authenticator,
+  async (req, res) => {
+    const { id, language } = req.params;
     const updates = req.body;
 
     if (!id) {
@@ -310,13 +322,12 @@ DataRouter.patch("/:language/update-one/:id",ValidateLanguage,Authenticator,asyn
         .status(200)
         .json({ message: "Record updated successfully", updatedRow: rows[0] });
     } catch (error) {
-console.log(error)
       return res.status(500).json({ message: error.message });
     }
   }
 );
 
-DataRouter.delete("/delete/:id",Authenticator, async (req, res) => {
+DataRouter.delete("/delete/:id", Authenticator, async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -331,45 +342,52 @@ DataRouter.delete("/delete/:id",Authenticator, async (req, res) => {
 
     return res.status(200).json({ message: "Record deleted successfully" });
   } catch (error) {
-    console.error("Error deleting record:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: error.message });
   }
 });
 
-DataRouter.delete("/delete-by-house/:house_no",Authenticator, async (req, res) => {
-  const { house_no } = req.params;
+DataRouter.delete(
+  "/delete-by-house/:house_no",
+  Authenticator,
+  async (req, res) => {
+    const { house_no } = req.params;
 
-  try {
-    const { rowCount } = await pool.query(
-      "DELETE FROM english_data WHERE house_no = $1",
-      [house_no]
-    );
+    try {
+      const { rowCount } = await pool.query(
+        "DELETE FROM english_data WHERE house_no = $1",
+        [house_no]
+      );
 
-    if (rowCount === 0) {
+      if (rowCount === 0) {
+        return res
+          .status(404)
+          .json({ message: "No records found for this house number" });
+      }
+
       return res
-        .status(404)
-        .json({ message: "No records found for this house number" });
+        .status(200)
+        .json({ message: `Deleted ${rowCount} record(s) successfully` });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
     }
-
-    return res
-      .status(200)
-      .json({ message: `Deleted ${rowCount} record(s) successfully` });
-  } catch (error) {
-    console.error("Error deleting records:", error);
-    return res.status(500).json({ message: "Internal server error" });
   }
-});
+);
 
-DataRouter.get("/:language/all-house-owners",ValidateLanguage,async(req,res)=>{
-  try {
-    const {language} = req.params
-    const query = `SELECT * FROM ${language}_data WHERE name = house_owner`
-    const response = await pool.query(query)
-    if(response.rowCount===0) return res.status(404).json({message:"No data found"})
-      else return res.json({data:response.rows})
-  } catch (error) {
-    return res.status(500).json({message:"Internal server error, please try again"})
+DataRouter.get(
+  "/:language/all-house-owners",
+  ValidateLanguage,
+  async (req, res) => {
+    try {
+      const { language } = req.params;
+      const query = `SELECT * FROM ${language}_data WHERE name = house_owner`;
+      const response = await pool.query(query);
+      if (response.rowCount === 0)
+        return res.status(404).json({ message: "No data found" });
+      else return res.json({ data: response.rows });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
   }
-})
+);
 
-module.exports = DataRouter
+module.exports = DataRouter;
