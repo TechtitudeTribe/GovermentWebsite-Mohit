@@ -83,7 +83,6 @@ export default function SearchHouse() {
       const response = await axios.get(
         `${API_URL}/data/${language}/search?field=${searchType}&value=${searchValue}`
       );
-      console.log(response)
       const data = response.data.data.filter((docs) => docs.name === docs.house_owner);
       if (data[0]) {
         setOwner(data[0]);
@@ -240,6 +239,7 @@ export default function SearchHouse() {
     <div className="bg-mid_gray p-6 min-[800px]:px-20">
       <div className="p-2 flex gap-10 justify-center ">
         <form onSubmit={handleSubmit} className="w-full text-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <input
             id="search-house"
             type={`${searchType === "house_no" ? "number" : "text"}`}
@@ -253,7 +253,7 @@ export default function SearchHouse() {
               searchValue &&
               language === "hindi" &&
               "font-kruti_dev"
-            }  rounded-full bg-white p-2 px-4 w-2/6 placeholder:text-black border border-black`}
+            }  rounded-full bg-white p-2 px-4  placeholder:text-black border border-black`}
             // value={searchValue}
             onChange={(e) =>
               setSearchValue(
@@ -267,12 +267,12 @@ export default function SearchHouse() {
           <select
             value={searchType}
             onChange={(e) => setSearchType(e.target.value)}
-            className="ml-2  rounded-full bg-white p-2 px-4 placeholder:text-black border border-black"
+            className=" rounded-full bg-white p-2 px-4 placeholder:text-black border border-black"
           >
             <option value="house_no">House No.</option>
             <option value="house_owner">House Owner</option>
           </select>
-          <br />
+           </div>
           <button type="submit">
             <AnimatedButton text="SEARCH" />
           </button>
@@ -289,19 +289,20 @@ export default function SearchHouse() {
         </div>
         <div className="table-container">
           {owner ? (
-            <table className="w-full table-fixed">
+            <div className="overflow-x-auto">
+            <table className="w-full table-auto">
               <thead>
                 <tr>
-                  <th className="p-4 text-xl">House No</th>
-                  <th className="p-4 text-xl">House Owner</th>
-                  <th className="p-4 text-xl">DOB</th>
-                  <th className="p-4 text-xl">Occupation</th>
+                  <th className="p-4 text-sm sm:text-xl">House No</th>
+                  <th className="p-4 text-sm sm:text-xl">House Owner</th>
+                  <th className="p-4 text-sm sm:text-xl">DOB</th>
+                  <th className="p-4 text-sm sm:text-xl">Occupation</th>
                 </tr>
               </thead>
               <tbody className="text-center ">
                 <tr
                   onClick={onOpen}
-                  className="cursor-pointer  bg-red-200 text-2xl"
+                  className="cursor-pointer  bg-red-200 text-sm sm:text-2xl"
                 >
                   <td className="p-4 ">{owner.house_no}</td>
                   <td
@@ -321,7 +322,7 @@ export default function SearchHouse() {
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
           ) : (
             state?.msg && (
               <div className="flex justify-center items-center w-fit m-auto">

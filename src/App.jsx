@@ -30,10 +30,8 @@ function App() {
       }})
       if(response.status === 200) return
     } catch (error) {
-      console.log(error);
       
       if(error.response.status === 401){
-        console.log('here');
         setUser(null)
         localStorage.setItem('auth',null)
       }else{

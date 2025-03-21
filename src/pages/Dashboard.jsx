@@ -127,7 +127,7 @@ export default function Dashboard() {
           });
           toggleSynce();
 
-      } catch (/* eslint-disable-line no-unused-vars */ error) {
+      } catch (error) {
         toast({
           title:error.response?.data.message|| "Failed to delete data",
           description: "Please Try again.",
@@ -200,8 +200,7 @@ export default function Dashboard() {
           status: 400,
         });
       }
-    } catch (/* eslint-disable-line no-unused-vars */ error) {
-      console.log(error);
+    } catch (error) {
       if (!error.response) {
         toast({
           title: "Unable get data from server",
@@ -319,7 +318,6 @@ export default function Dashboard() {
 
       doc.save(`${data.name}.pdf`);
     } catch (error) {
-      console.log(error);
       toast({
         title: error.response?.data.message || error.message,
         status: "error",
