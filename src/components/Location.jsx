@@ -284,10 +284,10 @@ export default function Location({ active = "/Unknow" }) {
 
   return (
     <section className=" flex justify-between  p-6 min-[800px]:px-20  bg-background_image_1  bg-no-repeat bg-center bg-cover">
-      <h4 className="text-2xl text-white pt-4">
+      <h4 className="text-lg sm:text-2xl text-white pt-4">
         Home &gt; {cleanText(active)}{" "}
       </h4>
-      {active === "/dashboard" && user && (
+      {active === "/dashboard" && user.token && (
         <div className="flex flex-col sm:flex-row gap-4">
           <Popover>
             <PopoverTrigger>

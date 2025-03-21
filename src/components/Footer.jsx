@@ -28,7 +28,7 @@ export default function Footer({active}) {
           ];
   return (
     <div className="">
-      <section className="min-[480px]:grid grid-cols-4 gap-20 p-6 min-[800px]:px-20">
+      <section className="md:grid grid-cols-4 gap-8 xl:gap-20 p-6 min-[800px]:px-20">
         <div className="col-span-2">
         <div className="flex gap-2 items-center">
           <img src={logo} alt="logo" className="h-12 max-[520px]:m-auto" />
