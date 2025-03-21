@@ -1,11 +1,136 @@
-.gradient-border {
+.corner-border {
+  position: relative;
+  z-index: 1;
+}
+
+.aboutus-card:hover {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  transition: box-shadow 500ms;
+}
+
+.top-left,
+.bottom-right {
+  position: absolute;
+  width: 50%;
+  height: 60%;
+  z-index: -1;
+  border-top-right-radius: 35px;
+  border-bottom-left-radius: 35px;
+}
+
+.top-left {
+  border-top: 30px solid var(--color-primary);
+  border-left: 30px solid var(--color-primary);
+  top: -10px;
+  left: -10px;
+}
+
+.bottom-right {
+  border-bottom: 30px solid var(--color-secondary);
+  border-right: 30px solid var(--color-secondary);
+  bottom: -10px;
+  right: -10px;
+}
+
+.animate-button {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--color-primary);
+  width: auto;
+  width: 12rem;
+  height: 3rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 20px;
+  color: black;
+}
+
+.animate-button::before {
+  content: '';
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  width: 175%;
+  height: 500%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.6s ease;
+  z-index: 0;
+  transform-origin: top left;
+  background: var(--color-secondary);
+}
+
+.animate-button:hover {
+  transform: scale(1.02)
+}
+
+.animate-button:hover::before {
+
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.animate-button>p,
+.animate-button>div {
+  z-index: 1;
+  position: relative;
+}
+
+.right-arrow {
+  fill: black;
+  height: 30px;
+}
+
+.animate-button:hover .right-arrow {
+  fill: white;
+}
+
+.animate-button:hover {
+  color: white;
+}
+
+.input-border {
+  padding: 2px;
+  background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+  border-radius: 15px;
+}
+
+.input-border>div {
+  border-radius: 15px;
+}
+
+.input-border>div>input:focus {
+  outline: none;
+}
+
+#search-house::-webkit-inner-spin-button,
+#search-house::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.react-calendar__month-view__weekdays {
+  padding: 10px;
+
+}
+
+.gradient-border-center,
+.gradient-border-left {
   position: relative;
   overflow: hidden;
   padding-bottom: 10px;
   z-index: 1;
 }
 
-.gradient-border::after {
+.gradient-border-left::after,
+.gradient-border-center::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -16,108 +141,8 @@
   background: linear-gradient(to right, var(--color-primary) 30%, var(--color-secondary));
   z-index: 0;
 }
-.corner-border {
-  position: relative;
-  z-index: 1;
-}
-.aboutus-card:hover{
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-  transition: box-shadow 500ms;
-}
-.top-left,
-.bottom-right {
-  position: absolute;
-  width: 50%;
-  height: 60%;
-  z-index: -1;
-  border-top-right-radius: 35px;
-  border-bottom-left-radius: 35px;
-}
-.top-left {
-  border-top: 30px solid var(--color-primary);
-  border-left: 30px solid var(--color-primary);
-  top: -10px;
-  left: -10px;
-}
-.bottom-right {
-  border-bottom: 30px solid var(--color-secondary);
-  border-right: 30px solid var(--color-secondary);
-  bottom: -10px;
-  right: -10px;
-}
-.animate-button{
-  position: relative;
-  overflow: hidden;     
-  cursor: pointer;  
-  background: var(--color-primary);   
-  width: auto; 
-  width: 12rem;
-  height: 3rem;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  border-radius: 20px;
-  color: black;
-}
-.animate-button::before {
-  content: '';
-  position: absolute;
-  top: 0%;            
-  left: 50%;           
-  width: 175%;         
-  height: 500%;         
-  border-radius: 50%;     
-  transform: translate(-50%, -50%) scale(0); 
-  transition: transform 0.6s ease;
-  z-index: 0;             
-  transform-origin:top left ;  
-  background: var(--color-secondary);         
-}
-.animate-button:hover{
-  transform: scale(1.02) 
-}
-.animate-button:hover::before{
-  
-  transform: translate(-50%, -50%) scale(1);
-}
-.animate-button>p , .animate-button>div{
-  z-index: 1;
-  position: relative;
-}
-.right-arrow{
-fill: black;
-height: 30px;
-}
-.animate-button:hover .right-arrow{
-  fill: white;
-}
-.animate-button:hover {
-  color: white;
-}
 
-.input-border{
-  padding: 2px;
-  background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
-  border-radius: 15px; 
-}
-.input-border>div{
-  border-radius: 15px; 
-}
-.input-border>div>input:focus{
-outline: none;
-}
-#search-house::-webkit-inner-spin-button,
-#search-house::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.react-calendar__navigation{
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-}
-.react-calendar__month-view__weekdays{
-  padding: 10px;
-
+.gradient-border-center::after {
+  left: 50%;
+  transform: translateX(-50%);
 }

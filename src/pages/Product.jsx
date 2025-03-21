@@ -5,7 +5,7 @@ export default function Product() {
     <div className="bg-mid_gray p-6 min-[800px]:p-20 font-light">
       <div className="flex items-center gap-4 m-fit">
         <img src={leafsDesign} alt="leaf-design" className="h-10" />
-        <h2 className="gradient-border text-4xl font-light bg-transparent">
+        <h2 className="gradient-border-left text-4xl font-light bg-transparent">
           Product 1
         </h2>
       </div>

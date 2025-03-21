@@ -1,18 +1,18 @@
 import leafsDesign from "/leafs-design.svg";
-import image1 from "/gallery-1.jfif";
-import image2 from "/gallery-2.jfif";
-import image3 from "/gallery-3.jfif";
-import image4 from "/gallery-4.jfif";
-import image5 from "/gallery-5.jfif";
-import image6 from "/gallery-6.jfif";
-import image7 from "/gallery-7.jfif";
-import image8 from "/gallery-8.jfif";
-import image9 from "/gallery-9.jfif";
-import image10 from "/gallery-10.jfif";
-import image11 from "/gallery-11.jfif";
-import image12 from "/gallery-12.jfif";
-import image13 from "/gallery-13.jfif";
-import locationIcon from "/location.svg";
+import image1 from "/media/gallery-1.jfif";
+import image2 from "/media/gallery-2.jfif";
+import image3 from "/media/gallery-3.jfif";
+import image4 from "/media/gallery-4.jfif";
+import image5 from "/media/gallery-5.jfif";
+import image6 from "/media/gallery-6.jfif";
+import image7 from "/media/gallery-7.jfif";
+import image8 from "/media/gallery-8.jfif";
+import image9 from "/media/gallery-9.jfif";
+import image10 from "/media/gallery-10.jfif";
+import image11 from "/media/gallery-11.jfif";
+import image12 from "/media/gallery-12.jfif";
+import image13 from "/media/gallery-13.jfif";
+import locationIcon from "/media/location.svg";
 import "../utils/Media.css";
 import AnimatedButton from "../components/AnimatedButton";
 export default function Media() {
@@ -42,8 +42,8 @@ export default function Media() {
     <div className=" p-2 lg:p-8  xl:p-20 bg-mid_gray">
       <div className="flex items-center gap-4 w-fit m-auto">
         <img src={leafsDesign} alt="leaf-design" className="h-10" />
-        <h2 className=" text-4xl font-light bg-transparent">
-          G<span className="gradient-border">allery</span>
+        <h2 className="gradient-border-center text-4xl font-light bg-transparent">
+          Gallery
         </h2>
         <img src={leafsDesign} alt="leaf-design" className="h-10" />
       </div>

@@ -14,7 +14,7 @@ export default function ContactUs() {
           <div className="wrapper bg-white p-8 rounded-tr-[75px] rounded-bl-[75px] ">
             <div className="flex items-center gap-4 p-4 mb-6">
               <img src={leafsDesign} alt="leaf-design" className="h-10" />
-              <h4 className="gradient-border text-5xl font-light">
+              <h4 className="gradient-border-left text-5xl font-light">
                 Get In Touch
               </h4>
             </div>
@@ -49,7 +49,7 @@ export default function ContactUs() {
           <div className="wrapper bg-white p-8 rounded-tr-[75px] rounded-bl-[75px] ">
             <div className="flex items-center gap-4 p-4 mb-6">
               <img src={leafsDesign} alt="leaf-design" className="h-10" />
-              <h4 className="gradient-border text-5xl font-light">
+              <h4 className="gradient-border-left text-5xl font-light">
                 Join Us On
               </h4>
             </div>
@@ -80,8 +80,8 @@ export default function ContactUs() {
         </div>
       </section>
       <section id="contactus-right">
-        <h3 className="w-fit text-5xl font-light m-auto">
-          Requ<span className="gradient-border pb-0">est Contact</span>
+        <h3 className="gradient-border-center pb-4 w-fit text-5xl font-light m-auto">
+          Request Contact
         </h3>
         <form>
           <div>
