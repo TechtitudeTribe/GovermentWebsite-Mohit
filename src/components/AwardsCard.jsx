@@ -13,7 +13,7 @@ export default function AwardsCard({ details }) {
           onMouseLeave={() => setIsHovered(false)}
         >
           <img src={details.image} alt={details.award_venue[language]} className="card-image w-full h-full object-cover" />
-          <div className={` absolute bottom-0 left-4  min-[850px]:left-14 w-11/12  min-[1024px]:w-3/4 h-20 transition-[height] ease-linear duration-200  ${isHovered && 'h-auto  min-[1224px]:h-60'}`}>
+          <div className={` absolute bottom-0 left-2/4 -translate-x-2/4 w-11/12  min-[1024px]:w-3/4 h-20 transition-[height] ease-linear duration-200  ${isHovered && 'h-auto  min-[1224px]:h-60'}`}>
           <div className='bg-primary p-3 rounded-t-2xl border-b-2 border-white min-[1224px]:text-xl'>
             <div className="flex gap-4">
                   <img src={awardBadge} alt="award-badge" />

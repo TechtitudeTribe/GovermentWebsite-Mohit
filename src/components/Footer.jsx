@@ -18,7 +18,7 @@ export default function Footer({ active }) {
     },
     {
       title: { english: "PRODUCT", hindi: "उत्पाद" },
-      path: "/product",
+      path: "/products",
     },
     {
       title: { english: "MEDIA", hindi: "संचार माध्यम पृष्ठ" },
