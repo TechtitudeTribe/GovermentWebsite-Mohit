@@ -23,12 +23,22 @@ import { krutiBase64 } from "../assets/Kruti-Base64";
 import { LanguageContext } from "../contexts/LanguageContext";
 export default function SearchHouse() {
   const API_URL = import.meta.env.VITE_API_URL;
+  // const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID;
   const [owner, setOwner] = useState(null);
   const [tabledata, setTabledata] = useState([]);
   const [searchType, setSearchType] = useState("house_no");
   const [searchValue, setSearchValue] = useState("");
   const [state, setState] = useState(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: tabeModalIsOpen,
+    onOpen: tableModalOnOpen,
+    onClose: tableModalOnClose,
+  } = useDisclosure();
+  // const {
+  //   isOpen: paymentMethodModalisOpen,
+  //   onOpen: paymentMethodModalOnOpen,
+  //   onClose: paymentMethodModalOnClose,
+  // } = useDisclosure();
   const { language } = useContext(LanguageContext);
 
   const hindiTableHeaders = [
@@ -44,7 +54,7 @@ export default function SearchHouse() {
     "lk{kj ;k fuj{kj ¼lk{kj gksus dh n'kk esa vgZrk vkSj C;kSjk½",
     "lfdZy NksM+ nsus ;k e`R;q dk fnukad",
     "vH;qfDr",
-    "eksckby u0"
+    "eksckby u0",
   ];
   const englishTableHeaders = [
     "SL NO.",
@@ -59,11 +69,11 @@ export default function SearchHouse() {
     "Education",
     "Date of death",
     "Complaints",
-    "Mobile No."
+    "Mobile No.",
   ];
   const handleSubmit = async (event = null) => {
     if (event) {
-      event.preventDefault(); 
+      event.preventDefault();
     }
     function isValidString(input) {
       const regex = /^[a-zA-Z!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~ ]*$/;
@@ -83,27 +93,96 @@ export default function SearchHouse() {
       const response = await axios.get(
         `${API_URL}/data/${language}/search?field=${searchType}&value=${searchValue}`
       );
-      const data = response.data.data.filter((docs) => docs.name === docs.house_owner);
+      const data = response.data.data.filter(
+        (docs) => docs.name === docs.house_owner
+      );
       if (data[0]) {
         setOwner(data[0]);
         setTabledata(response.data.data);
         setState(null);
-      } else if ( data.length < 1) {
+      } else if (data.length < 1) {
         setOwner(null);
         setState({
-          msg: `No data found associated with ${searchType.split("_").join(" ")}`,
+          msg: `No data found associated with ${searchType
+            .split("_")
+            .join(" ")}`,
           value: searchValue,
         });
-      } 
+      }
     } catch (error) {
       setOwner(null);
       setTabledata(null);
-      setState({ msg:error.response?.data.message|| "Unknow error, please try again!!", value: null });
+      setState({
+        msg: error.response?.data.message || error.message,
+        value: null,
+      });
     }
-
-    
   };
-
+  // const loadRazorpayScript = (callback) => {
+  //   if (document.getElementById("razorpay-script")) {
+  //     return callback();
+  //   }
+  
+  //   const script = document.createElement("script");
+  //   script.id = "razorpay-script";
+  //   script.src = "https://checkout.razorpay.com/v1/checkout.js";
+  //   script.onload = callback;
+  //   script.onerror = () => {
+  //     alert("Error loading Razorpay script. Please try again later.");
+  //   };
+  
+  //   document.body.appendChild(script);
+  // };
+  
+  // const initiateRazorpayment = async () => {
+  //   try {
+  //     loadRazorpayScript(async () => {
+  //       const response = await axios.post(`${API_URL}/payments/create-order`);
+        
+  //       const options = {
+  //         key: RAZORPAY_KEY_ID, 
+  //         amount: response.data.order.amount, 
+  //         currency: "INR",
+  //         name: "Pariwar Nakal",
+  //         description: "Download Pariwar Nakal",
+  //         // image: "https://example.com/your_logo",
+  //         order_id: response.data.order.id,
+  //         handler: async function (response) {
+  //           // The payment is successful, verify payment
+  //           const paymentDetails = {
+  //             razorpay_order_id: response.data.order.id,
+  //             razorpay_payment_id: response.razorpay_payment_id,
+  //             razorpay_signature: response.razorpay_signature,
+  //           };
+            
+  //           try {
+              
+  //             await axios.post(`${API_URL}/payments/verify-payment`, paymentDetails);
+  //             alert("Payment successful!");
+  //             // downloaddPDF()
+  //           } catch (error) {
+  //             alert(`Payment verification failed: ${error.message}`);
+  //           }
+  //         },
+  //         // prefill: {
+  //         //   name: "Customer Name",
+  //         //   email: "customer@example.com",
+  //         //   contact: "9876543210",
+  //         // },
+  //         // theme: {
+  //         //   color: "#F37254", 
+  //         // },
+  //       };
+  
+  //       const rzp1 = new window.Razorpay(options);
+  //       rzp1.open();
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //     alert("An error occurred. Please try again.");
+  //   }
+  // };
+  
   const downloaddPDF = () => {
     const pdf = new jsPDF();
     if (language === "hindi") {
@@ -197,8 +276,10 @@ export default function SearchHouse() {
       row.shachhar,
     ]);
     autoTable(pdf, {
-      head:language === "hindi"
-      ? [[...hindiTableHeaders]] : [[...englishTableHeaders]],
+      head:
+        language === "hindi"
+          ? [[...hindiTableHeaders]]
+          : [[...englishTableHeaders]],
       body: [...tableData1],
       startY: currentY + 5,
 
@@ -229,50 +310,50 @@ export default function SearchHouse() {
     );
     pdf.save("pariwar-table.pdf");
   };
-  useEffect(()=>{
-    setTabledata([])
-    if(searchType && searchValue){
-      handleSubmit()
+  useEffect(() => {
+    setTabledata([]);
+    if (searchType && searchValue) {
+      handleSubmit();
     }
-  },[language])
+  }, [language]);
   return (
     <div className="bg-mid_gray p-6 min-[800px]:px-20">
       <div className="p-2 flex gap-10 justify-center ">
         <form onSubmit={handleSubmit} className="w-full text-center">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <input
-            id="search-house"
-            type={`${searchType === "house_no" ? "number" : "text"}`}
-            placeholder={`${
-              searchType === "house_no"
-                ? "Enter House No."
-                : "Enter House Owner Name."
-            }  `}
-            className={`${
-              searchType === "house_owner" &&
-              searchValue &&
-              language === "hindi" &&
-              "font-kruti_dev"
-            }  rounded-full bg-white p-2 px-4  placeholder:text-black border border-black`}
-            // value={searchValue}
-            onChange={(e) =>
-              setSearchValue(
+            <input
+              id="search-house"
+              type={`${searchType === "house_no" ? "number" : "text"}`}
+              placeholder={`${
                 searchType === "house_no"
-                  ? Number(e.target.value)
-                  : e.target.value
-              )
-            }
-            required
-          />
-          <select
-            value={searchType}
-            onChange={(e) => setSearchType(e.target.value)}
-            className=" rounded-full bg-white p-2 px-4 placeholder:text-black border border-black"
-          >
-            <option value="house_no">House No.</option>
-            <option value="house_owner">House Owner</option>
-          </select>
-           </div>
+                  ? "Enter House No."
+                  : "Enter House Owner Name."
+              }  `}
+              className={`${
+                searchType === "house_owner" &&
+                searchValue &&
+                language === "hindi" &&
+                "font-kruti_dev"
+              }  rounded-full bg-white p-2 px-4  placeholder:text-black border border-black`}
+              // value={searchValue}
+              onChange={(e) =>
+                setSearchValue(
+                  searchType === "house_no"
+                    ? Number(e.target.value)
+                    : e.target.value
+                )
+              }
+              required
+            />
+            <select
+              value={searchType}
+              onChange={(e) => setSearchType(e.target.value)}
+              className=" rounded-full bg-white p-2 px-4 placeholder:text-black border border-black"
+            >
+              <option value="house_no">House No.</option>
+              <option value="house_owner">House Owner</option>
+            </select>
+          </div>
           <button type="submit">
             <AnimatedButton text="SEARCH" />
           </button>
@@ -290,66 +371,71 @@ export default function SearchHouse() {
         <div className="table-container">
           {owner ? (
             <div className="overflow-x-auto">
-            <table className="w-full table-auto">
-              <thead>
-                <tr>
-                  <th className="p-4 text-sm sm:text-xl">House No</th>
-                  <th className="p-4 text-sm sm:text-xl">House Owner</th>
-                  <th className="p-4 text-sm sm:text-xl">DOB</th>
-                  <th className="p-4 text-sm sm:text-xl">Occupation</th>
-                </tr>
-              </thead>
-              <tbody className="text-center ">
-                <tr
-                  onClick={onOpen}
-                  className="cursor-pointer  bg-red-200 text-sm sm:text-2xl"
-                >
-                  <td className="p-4 ">{owner.house_no}</td>
-                  <td
-                    className={`p-4 ${
-                      language === "hindi" && "font-kruti_dev"
-                    }`}
+              <table className="w-full table-auto">
+                <thead>
+                  <tr>
+                    <th className="p-4 text-sm sm:text-xl">House No</th>
+                    <th className="p-4 text-sm sm:text-xl">House Owner</th>
+                    <th className="p-4 text-sm sm:text-xl">DOB</th>
+                    <th className="p-4 text-sm sm:text-xl">Occupation</th>
+                  </tr>
+                </thead>
+                <tbody className="text-center ">
+                  <tr
+                    onClick={tableModalOnOpen}
+                    className="cursor-pointer  bg-red-200 text-sm sm:text-2xl"
                   >
-                    {owner.house_owner}
-                  </td>
-                  <td className="p-4 ">{excelDateToJSDate(owner.dob)}</td>
-                  <td
-                    className={`p-4 ${
-                      language === "hindi" && "font-kruti_dev"
-                    }`}
-                  >
-                    {owner.occupation}
-                  </td>
-                </tr>
-              </tbody>
-            </table></div>
+                    <td className="p-4 ">{owner.house_no}</td>
+                    <td
+                      className={`p-4 ${
+                        language === "hindi" && "font-kruti_dev"
+                      }`}
+                    >
+                      {owner.house_owner}
+                    </td>
+                    <td className="p-4 ">{excelDateToJSDate(owner.dob)}</td>
+                    <td
+                      className={`p-4 ${
+                        language === "hindi" && "font-kruti_dev"
+                      }`}
+                    >
+                      {owner.occupation}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           ) : (
             state?.msg && (
               <div className="flex justify-center items-center w-fit m-auto">
-              <h3 className=" text-xl p-4 font-medium">
-                {state?.msg}{" "}
-                {state?.value && (
-                  <span
-                    className={`${
-                      searchType === "house_owner" &&
-                      language === "hindi" &&
-                      "font-kruti_dev"
-                    }`}
-                  >
-                    {state.value}
-                  </span>
+                <h3 className=" text-xl p-4 font-medium">
+                  {state?.msg}{" "}
+                  {state?.value && (
+                    <span
+                      className={`${
+                        searchType === "house_owner" &&
+                        language === "hindi" &&
+                        "font-kruti_dev"
+                      }`}
+                    >
+                      {state.value}
+                    </span>
+                  )}
+                </h3>
+                {state?.msg === "Searching..." && (
+                  <Spinner
+                    thickness="4px"
+                    emptyColor="gray.200"
+                    color="blue.500"
+                    size="xl"
+                  />
                 )}
-              </h3>
-              {state?.msg === "Searching..." && <Spinner thickness="4px"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="xl"/>}
-               </div>
+              </div>
             )
           )}
         </div>
       </div>
-      <Modal onClose={onClose} size={"xl"} isOpen={isOpen}>
+      <Modal onClose={tableModalOnClose} size={"xl"} isOpen={tabeModalIsOpen}>
         <ModalOverlay />
         <ModalContent minW={"95vw"}>
           <ModalHeader
@@ -387,9 +473,7 @@ export default function SearchHouse() {
                   : "Village: Dharmapura"}{" "}
               </Text>
               <Text>
-                {language === "hindi"
-                  ? `fodkl [k.M & gYnkSj`
-                  : "Block Haldaur"}
+                {language === "hindi" ? `fodkl [k.M & gYnkSj` : "Block Haldaur"}
               </Text>
               <Text>
                 {language === "hindi" ? `rglhy & fctukSj` : "Tehsil Bijnor"}{" "}
@@ -517,6 +601,45 @@ export default function SearchHouse() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      {/* <Modal
+        isOpen={paymentMethodModalisOpen}
+        onClose={paymentMethodModalOnClose}
+        size={"xl"}
+      >
+        <ModalOverlay />
+        <ModalOverlay />
+        <ModalContent className="self-center">
+          <ModalHeader>
+            <Text className="text-2xl">Select Payment Method -</Text>
+            <ModalCloseButton />
+          </ModalHeader>
+          <ModalBody>
+            <div className="flex gap-4">
+              <button className="flex flex-col gap-2 w-2/4 h-[250px]">
+                <img
+                  className="w-full h-5/6 object-cover"
+                  src="https://www.ecommerce-nation.com/wp-content/uploads/2019/02/razorpay.webp"
+                  alt="razorpay"
+                />
+                <p className="text-xl rounded-md py-1 bg-blue-600 text-white">
+                  RazorPay
+                </p>
+              </button>
+              <button className="flex flex-col gap-2 w-2/4 h-[250px] ">
+                <img
+                  className="w-full h-5/6 "
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB2MHWispO0YAlMR3U3MOAUGuWyZmzMwUAXA&s"
+                  alt="cash"
+                />
+                <p className="text-xl rounded-md py-1 bg-green-600 text-white">
+                  Cash
+                </p>
+              </button>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal> */}
     </div>
   );
 }

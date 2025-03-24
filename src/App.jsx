@@ -5,7 +5,6 @@ import Navbar from './components/Navbar'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import AboutUs from './pages/AboutUs'
-import Product from './pages/Product'
 import Media from './pages/Media'
 import ContactUs from './pages/ContactUs'
 import Login from './pages/Login'
@@ -17,6 +16,7 @@ import Dashboard from './pages/Dashboard'
 import { AuthContext } from './contexts/AuthContext'
 import axios from 'axios'
 import Attendance from './pages/Attendance'
+import Products from './pages/Products'
 
 function App() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -56,7 +56,7 @@ const UpdateRoute = ()=>{
     <Routes>
       <Route path='/' element={<Home/>}/>
       <Route path='/about-us' element={<AboutUs/>}/>
-      <Route path='/product' element={<Product/>}/>
+      <Route path='/products' element={<Products/>}/>
       <Route path='/media' element={<Media/>}/>
       <Route path='/contact-us' element={<ContactUs/>}/>
       <Route path='/login' element={<Login/>}/>
