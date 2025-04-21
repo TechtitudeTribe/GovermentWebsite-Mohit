@@ -17,6 +17,7 @@ const createAttendanceTable = require("./models/attendance.model");
 const createAdminTable = require("./models/admin.model");
 const createEnglishDataTable = require("./models/englishData.model");
 const createHindiDataTable = require("./models/hindiData.model");
+const createPaymentTable = require("./models/payments.model")
 server.use("/auth",AuthRouter)
 server.use("/attendance",AttendanceRouter)
 server.use('/data',DataRouter)
@@ -42,8 +43,9 @@ try {
   await pool.connect()
   await createAttendanceTable()
   await createAdminTable()
-  await createEnglishDataTable()
   await createHindiDataTable()
+  await createEnglishDataTable()
+  await createPaymentTable()
   console.log('PostgreSQL Connected')
 } catch (error) {
   console.log(error)
