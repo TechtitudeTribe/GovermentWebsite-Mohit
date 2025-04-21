@@ -30,7 +30,8 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { LanguageContext } from "../contexts/LanguageContext";
+// import { LanguageContext } from "../contexts/LanguageContext";
+//eslint-disable-next-line react/prop-types
 export default function Location({ active = "/Unknow" }) {
   const API_URL = import.meta.env.VITE_API_URL;
   const hindiTableHeaders = [
@@ -69,7 +70,10 @@ export default function Location({ active = "/Unknow" }) {
     return cleaned;
   }
   const { user, setUser } = useContext(AuthContext);
-  const {language} = useContext(LanguageContext)
+  // const { language } = useContext(LanguageContext);
+  //For now only hindi language will be used
+  const language  = "hindi"
+  
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const navigate = useNavigate();
@@ -287,7 +291,7 @@ export default function Location({ active = "/Unknow" }) {
       <h4 className="text-lg sm:text-2xl text-white pt-4">
         Home &gt; {cleanText(active)}{" "}
       </h4>
-      {active === "/dashboard" && user.token && (
+      {active === "/dashboard" && user?.token && (
         <div className="flex flex-col sm:flex-row gap-4">
           <Popover>
             <PopoverTrigger>
@@ -298,7 +302,7 @@ export default function Location({ active = "/Unknow" }) {
               <PopoverCloseButton />
               <PopoverHeader>Select excel file</PopoverHeader>
               <PopoverBody>
-                <p className="text-red-600 opacity-75 mb-2">*Please cross check the language before uploading</p>
+                {/* <p className="text-red-600 opacity-75 mb-2">*Please cross check the language before uploading</p> */}
                 <form onSubmit={handleExcelSubmit}>
                   <input type="file" accept=".xlx, .xlsx" required />
                   <br />
@@ -321,7 +325,7 @@ export default function Location({ active = "/Unknow" }) {
           <ModalHeader>Add Single Data</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <p className="text-red-600 opacity-75 mb-2">*Please cross check the language before uploading</p>
+          {/* <p className="text-red-600 opacity-75 mb-2">*Please cross check the language before uploading</p> */}
             <form
               onSubmit={handleSingleDataSubmit}
               className="grid grid-cols-2"

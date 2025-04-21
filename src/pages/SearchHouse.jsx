@@ -1,4 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import {
+  //  useContext, 
+   useEffect, 
+   useState } from "react";
 import AnimatedButton from "../components/AnimatedButton";
 import syncIcon from "/sync-icon.svg";
 import axios from "axios";
@@ -11,7 +14,6 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Button,
   Text,
   Box,
   Spinner,
@@ -20,10 +22,10 @@ import excelDateToJSDate from "../helpers/excelToJSDate";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { krutiBase64 } from "../assets/Kruti-Base64";
-import { LanguageContext } from "../contexts/LanguageContext";
+// import { LanguageContext } from "../contexts/LanguageContext";
 export default function SearchHouse() {
   const API_URL = import.meta.env.VITE_API_URL;
-  // const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID;
+  const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID;
   const [owner, setOwner] = useState(null);
   const [tabledata, setTabledata] = useState([]);
   const [searchType, setSearchType] = useState("house_no");
@@ -34,12 +36,14 @@ export default function SearchHouse() {
     onOpen: tableModalOnOpen,
     onClose: tableModalOnClose,
   } = useDisclosure();
-  // const {
-  //   isOpen: paymentMethodModalisOpen,
-  //   onOpen: paymentMethodModalOnOpen,
-  //   onClose: paymentMethodModalOnClose,
-  // } = useDisclosure();
-  const { language } = useContext(LanguageContext);
+  const {
+    isOpen: paymentMethodModalisOpen,
+    onOpen: paymentMethodModalOnOpen,
+    onClose: paymentMethodModalOnClose,
+  } = useDisclosure();
+  // const { language } = useContext(LanguageContext);
+  //For now only hindi language will be used
+  const language  = "hindi"
 
   const hindiTableHeaders = [
     "Øe la-",
@@ -76,6 +80,7 @@ export default function SearchHouse() {
       event.preventDefault();
     }
     function isValidString(input) {
+      //eslint-disable-next-line
       const regex = /^[a-zA-Z!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~ ]*$/;
       return regex.test(input);
     }
@@ -118,72 +123,72 @@ export default function SearchHouse() {
       });
     }
   };
-  // const loadRazorpayScript = (callback) => {
-  //   if (document.getElementById("razorpay-script")) {
-  //     return callback();
-  //   }
+  const loadRazorpayScript = (callback) => {
+    if (document.getElementById("razorpay-script")) {
+      return callback();
+    }
   
-  //   const script = document.createElement("script");
-  //   script.id = "razorpay-script";
-  //   script.src = "https://checkout.razorpay.com/v1/checkout.js";
-  //   script.onload = callback;
-  //   script.onerror = () => {
-  //     alert("Error loading Razorpay script. Please try again later.");
-  //   };
+    const script = document.createElement("script");
+    script.id = "razorpay-script";
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = callback;
+    script.onerror = () => {
+      alert("Error loading Razorpay script. Please try again later.");
+    };
   
-  //   document.body.appendChild(script);
-  // };
+    document.body.appendChild(script);
+  };
   
-  // const initiateRazorpayment = async () => {
-  //   try {
-  //     loadRazorpayScript(async () => {
-  //       const response = await axios.post(`${API_URL}/payments/create-order`);
+  const initiateRazorpayment = async () => {
+    try {
+      loadRazorpayScript(async () => {
+        const response = await axios.post(`${API_URL}/payments/create-order`);
         
-  //       const options = {
-  //         key: RAZORPAY_KEY_ID, 
-  //         amount: response.data.order.amount, 
-  //         currency: "INR",
-  //         name: "Pariwar Nakal",
-  //         description: "Download Pariwar Nakal",
-  //         // image: "https://example.com/your_logo",
-  //         order_id: response.data.order.id,
-  //         handler: async function (response) {
-  //           // The payment is successful, verify payment
-  //           const paymentDetails = {
-  //             razorpay_order_id: response.data.order.id,
-  //             razorpay_payment_id: response.razorpay_payment_id,
-  //             razorpay_signature: response.razorpay_signature,
-  //           };
+        const options = {
+          key: RAZORPAY_KEY_ID, 
+          amount: response.data.order.amount, 
+          currency: "INR",
+          name: "Pariwar Nakal",
+          description: "Download Pariwar Nakal",
+          // image: "https://example.com/your_logo",
+          order_id: response.data.order.id,
+          handler: async function (response) {
+            // The payment is successful, verify payment
+            const paymentDetails = {
+              razorpay_order_id: response.data.order.id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            };
             
-  //           try {
+            try {
               
-  //             await axios.post(`${API_URL}/payments/verify-payment`, paymentDetails);
-  //             alert("Payment successful!");
-  //             // downloaddPDF()
-  //           } catch (error) {
-  //             alert(`Payment verification failed: ${error.message}`);
-  //           }
-  //         },
-  //         // prefill: {
-  //         //   name: "Customer Name",
-  //         //   email: "customer@example.com",
-  //         //   contact: "9876543210",
-  //         // },
-  //         // theme: {
-  //         //   color: "#F37254", 
-  //         // },
-  //       };
+              await axios.post(`${API_URL}/payments/verify-payment`, paymentDetails);
+              alert("Payment successful!");
+              // downloaddPDF()
+            } catch (error) {
+              alert(`Payment verification failed: ${error.message}`);
+            }
+          },
+          // prefill: {
+          //   name: "Customer Name",
+          //   email: "customer@example.com",
+          //   contact: "9876543210",
+          // },
+          // theme: {
+          //   color: "#F37254", 
+          // },
+        };
   
-  //       const rzp1 = new window.Razorpay(options);
-  //       rzp1.open();
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //     alert("An error occurred. Please try again.");
-  //   }
-  // };
+        const rzp1 = new window.Razorpay(options);
+        rzp1.open();
+      });
+    } catch (error) {
+      console.log(error);
+      alert("An error occurred. Please try again.");
+    }
+  };
   
-  const downloaddPDF = () => {
+  async function downloaddPDF () {
     const pdf = new jsPDF();
     if (language === "hindi") {
       pdf.addFileToVFS("Kruti-Dev-010.ttf", krutiBase64);
@@ -315,6 +320,7 @@ export default function SearchHouse() {
     if (searchType && searchValue) {
       handleSubmit();
     }
+    //eslint-disable-next-line
   }, [language]);
   return (
     <div className="bg-mid_gray p-6 min-[800px]:px-20">
@@ -597,12 +603,12 @@ export default function SearchHouse() {
                 ? `fVIi.kh%& vH;qfDr LrEHk esa vkns'k dh dh la[;k rFkk fnukad] ;fn dksbZ gks] ftlds }kjk dksbZ uke c<+k;k ;k gVk;k x;k gks] ds lkFk izfof"V djus okys ds gLrk{kj Hkh fd;s tkus pkfg;sA`
                 : "In the Remarks column, the number and date of the order, if any, by which a name has been added or deleted, should also be mentioned along with the signature of the person making the entry."}
             </Text>
-            <Button onClick={downloaddPDF}>Download as PDF</Button>
+            <button className="py-2 px-4 bg-primary text-white text-lg rounded-md m-3" onClick={paymentMethodModalOnOpen}>Download as PDF</button>
           </ModalFooter>
         </ModalContent>
       </Modal>
 
-      {/* <Modal
+      <Modal
         isOpen={paymentMethodModalisOpen}
         onClose={paymentMethodModalOnClose}
         size={"xl"}
@@ -639,7 +645,7 @@ export default function SearchHouse() {
             </div>
           </ModalBody>
         </ModalContent>
-      </Modal> */}
+      </Modal>
     </div>
   );
 }

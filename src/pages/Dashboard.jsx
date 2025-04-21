@@ -27,13 +27,16 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { LanguageContext } from "../contexts/LanguageContext";
+// import { LanguageContext } from "../contexts/LanguageContext";
 import blankQRCode from "/blank-qr.webp";
+import { krutiBase64 } from "../assets/Kruti-Base64";
 export default function Dashboard() {
   const API_URL = import.meta.env.VITE_API_URL;
-  const { user } = useContext(AuthContext);
+  const { user,setUser } = useContext(AuthContext);
 
-  const { language } = useContext(LanguageContext);
+  // const { language } = useContext(LanguageContext);
+  //For now only hindi language will be used
+  const language  = "hindi"
   const navigate = useNavigate();
   const [state, setState] = useState({ message: "Loading...", status: false });
   const [tableData, setTableData] = useState([]);
@@ -43,6 +46,7 @@ export default function Dashboard() {
   const toast = useToast();
   const [sync, setSync] = useState(false);
   const toggleSynce = () => setSync((prev) => !prev);
+  const [isPDFDownloading,setPDFDownloading] = useState(null)
   const {
     isOpen: isEditModalOpen,
     onOpen: onEditModalOpen,
@@ -68,7 +72,7 @@ export default function Dashboard() {
     "lk{kj ;k fuj{kj ¼lk{kj gksus dh n'kk esa vgZrk vkSj C;kSjk½",
     "lfdZy NksM+ nsus ;k e`R;q dk fnukad",
     "vH;qfDr",
-    "eksckby u0"
+    "eksckby u0",
   ];
   const englishTableHeaders = [
     "SL NO.",
@@ -83,7 +87,7 @@ export default function Dashboard() {
     "Education",
     "Date of death",
     "Complaints",
-    "Mobile No."
+    "Mobile No.",
   ];
   const handleDeleteModal = (element) => {
     setFormData(element);
@@ -94,7 +98,8 @@ export default function Dashboard() {
     if (formData.name === formData.house_owner) {
       try {
         await axios.delete(
-          `${API_URL}/data/delete-by-house/${formData.house_no}`,{headers:{Authorization:`Bearer ${user.token}`}}
+          `${API_URL}/data/delete-by-house/${formData.house_no}`,
+          { headers: { Authorization: `Bearer ${user.token}` } }
         );
         toggleSynce();
         toast({
@@ -115,21 +120,20 @@ export default function Dashboard() {
       }
     } else {
       try {
-        await axios.delete(
-          `${API_URL}/data/delete/${formData.id}`,{headers:{Authorization:`Bearer ${user.token}`}}
-        )
-          toast({
-            title: "Data deleted",
-            status: "success",
-            position: "top",
-            duration: 5000,
-            isClosable: true,
-          });
-          toggleSynce();
-
+        await axios.delete(`${API_URL}/data/delete/${formData.id}`, {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+        toast({
+          title: "Data deleted",
+          status: "success",
+          position: "top",
+          duration: 5000,
+          isClosable: true,
+        });
+        toggleSynce();
       } catch (error) {
         toast({
-          title:error.response?.data.message|| "Failed to delete data",
+          title: error.response?.data.message || "Failed to delete data",
           description: "Please Try again.",
           status: "error",
           position: "top",
@@ -152,7 +156,8 @@ export default function Dashboard() {
     try {
       const response = await axios.patch(
         `${API_URL}/data/${language}/update-one/${formData.id}`,
-        formData,{headers:{Authorization:`Bearer ${user.token}`}}
+        formData,
+        { headers: { Authorization: `Bearer ${user.token}` } }
       );
       if (response.status === 200) {
         toast({
@@ -180,7 +185,9 @@ export default function Dashboard() {
     setTableData([]);
     setState({ message: "Loading...", description: "", status: false });
     try {
-      const response = await axios.get(`${API_URL}/data/${language}/get-all`,{headers:{Authorization:`Bearer ${user.token}`}});
+      const response = await axios.get(`${API_URL}/data/${language}/get-all`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
       if (response.status === 200) {
         let data = response.data;
         data.sort((a, b) => a.house_no - b.house_no);
@@ -204,7 +211,7 @@ export default function Dashboard() {
       if (!error.response) {
         toast({
           title: "Unable get data from server",
-          description: "Looks like the server is down, contact the developer",
+          description: error.message,
           status: "error",
           position: "top",
           duration: 5000,
@@ -212,7 +219,7 @@ export default function Dashboard() {
         });
         setState({
           message: "Unable get data from server",
-          description: "Looks like the server is down, contact the developer",
+          description: error.message,
           status: true,
         });
       } else {
@@ -247,6 +254,7 @@ export default function Dashboard() {
             duration: 5000,
             isClosable: true,
           });
+          setUser({token:null})
         } else {
           setState();
           toast({
@@ -276,47 +284,63 @@ export default function Dashboard() {
   }, [sync, user, language]);
 
   const generatePDF = async (data) => {
-    try {
-      if(language === 'hindi'){
-        const response = await axios.get(`${API_URL}/data/english/get-one/${data.id}`,{headers:{Authorization:`Bearer ${user.token}`}})
-        data = {...data,...response.data.data}
+  try {
+    setPDFDownloading(data.id)
+    let doc_name =`${data.house_owner}`
+      if (language === "english") {
+        const response = await axios.get(
+          `${API_URL}/data/hindi/get-one/${data.id}`,
+          { headers: { Authorization: `Bearer ${user.token}` } }
+        );
+        data = { ...data, ...response.data.data };
       }
-      const qrCodeDataUrl = await QRCode.toDataURL(
-        data.id.split("_").join("/")
-      );
-      const width = 135;
-      const height = 85;
+      if(language === 'hindi'){
+        const response = await axios.get(
+          `${API_URL}/data/english/get-one/${data.id}`,
+          { headers: { Authorization: `Bearer ${user.token}` } }
+        );
+        doc_name = response.data.data.house_owner
+      }
+      const qrCodeDataUrl = await QRCode.toDataURL(data.id);
+      const width = 270;
+      const height = 180;
       const doc = new jsPDF("l", "mm", [width, height]);
 
+      doc.addFileToVFS("Kruti-Dev-010.ttf", krutiBase64);
+      doc.addFont("Kruti-Dev-010.ttf", "Kruti-Dev-010", "normal");
+      
       doc.setLineWidth(0.5); //Line width for horizontal line and border
       doc.setDrawColor(0, 0, 0);
       doc.rect(5, 5, width - 10, height - 10); // Border
-
+      
       let currentY = 2;
-      const title = "Nagar Palika parishad-Bijnore";
-      doc.setFont("helvetica", "bold");
-      doc.text(title, (width - doc.getTextWidth(title)) / 2, (currentY += 10));
-
-      doc.setFont("helvetica", "normal");
-      doc.line(5, (currentY += 4), width - 5, currentY);
+      const title = "xzke iapk;r /keZiqjk    fodkl [k.M gYnkSj    fctukSj";
+      doc.setFont("Kruti-Dev-010");
+      doc.setFontSize(38);
+      doc.text(title, (width - doc.getTextWidth(title)) / 2, (currentY += 18));
+      
+      doc.line(5, (currentY += 10), width - 5, currentY);
       let currentX = 8;
-      doc.setFontSize(14);
-
-      const propertyOwner = `Property Owner: ${data.house_owner} C/o ${data.father_husband_name}`;
+      doc.setFontSize(32);
+      
+      const propertyOwner = `laifÙk ds ekfyd % ${data.house_owner}] vfHkHkkod % ${data.father_husband_name}`;
+      doc.setFont("Kruti-Dev-010");
       const lines = doc.splitTextToSize(propertyOwner, width - 15);
-      lines.forEach((line) => doc.text(line, currentX, (currentY += 6)));
-      doc.text("Property Type: Residential", currentX, (currentY += 8));
+      lines.forEach((line) => doc.text(line, currentX, (currentY += 14)));
+      doc.text("lEiÙkh ds çdkj % vkoklh;", currentX, (currentY += 14));
+      
+      doc.setFontSize(32);
+      doc.text(`vf}rh; la[;k % `, currentX, (currentY += 14));
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(28);
+      doc.text(` ${data.id}`, currentX + doc.getTextWidth(`vf}rh; la[;k % `),currentY)
+      doc.setFont("Kruti-Dev-010");
+      doc.setFontSize(32);
+      doc.text(`?kj uacj  % ${data.house_no}`, currentX, (currentY += 14));
 
-      doc.text(
-        `Unique No.: ${data.id.split("_").join("/")}`,
-        currentX,
-        (currentY += 8)
-      );
-      doc.text(`Property No.: ${data.house_no}`, currentX, (currentY += 8));
+      doc.addImage(qrCodeDataUrl, "PNG", width - 77, height - 77, 70, 70);
 
-      doc.addImage(qrCodeDataUrl, "PNG", width - 37, height - 37, 30, 30);
-
-      doc.save(`${data.name}.pdf`);
+      doc.save(`${doc_name}.pdf`);
     } catch (error) {
       toast({
         title: error.response?.data.message || error.message,
@@ -325,6 +349,8 @@ export default function Dashboard() {
         duration: 5000,
         isClosable: true,
       });
+    }finally{
+      setPDFDownloading(null)
     }
   };
   return (
@@ -446,6 +472,7 @@ export default function Dashboard() {
                   </td>
                   <td className="m-1 relative overflow-hidden">
                     {element.name === element.house_owner && (
+
                       <Fragment>
                         <img
                           src={blankQRCode}
@@ -454,9 +481,11 @@ export default function Dashboard() {
                         />
                         <button
                           onClick={() => generatePDF(element)}
-                          className="absolute top-2/4 -translate-y-2/4 left-2/4 -translate-x-2/4 bg-secondary text-white text-xs min-w-fit p-px"
+                          className="absolute top-2/4 -translate-y-2/4 left-0 w-full bg-secondary text-white text-xs min-w-fit p-px disabled:cursor-not-allowed disabled:opacity-85"
+                          disabled={Boolean(isPDFDownloading)}
                         >
-                          Download
+                         {isPDFDownloading === element.id ? <Spinner size={'md'}/>
+                        :  <p>Download</p>}
                         </button>
                       </Fragment>
                     )}
@@ -582,7 +611,7 @@ export default function Dashboard() {
 
       <Modal isOpen={isEditModalOpen} onClose={onEditModalClose} size={"xl"}>
         <ModalOverlay />
-        <ModalContent minW={"60vw"} maxW={'100vw'} w={'fit-content'}>
+        <ModalContent minW={"60vw"} maxW={"100vw"} w={"fit-content"}>
           <ModalHeader>Edit Form</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -608,7 +637,8 @@ export default function Dashboard() {
                           }))
                         }
                         className={`${
-                         language === 'hindi' && (index === 1 ||
+                          language === "hindi" &&
+                          (index === 1 ||
                             index === 5 ||
                             index === 6 ||
                             index === 8 ||
