@@ -332,7 +332,7 @@ DataRouter.delete("/delete/:id", Authenticator, async (req, res) => {
 
   try {
     const { rowCount } = await pool.query(
-      "DELETE FROM english_data WHERE id = $1",
+      "DELETE FROM hindi_data WHERE id = $1",
       [id]
     );
 
