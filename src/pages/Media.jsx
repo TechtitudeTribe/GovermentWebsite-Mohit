@@ -1,17 +1,17 @@
 import leafsDesign from "/leafs-design.svg";
-import image1 from "/media/gallery-1.jfif";
-import image2 from "/media/gallery-2.jfif";
-import image3 from "/media/gallery-3.jfif";
-import image4 from "/media/gallery-4.jfif";
-import image5 from "/media/gallery-5.jfif";
-import image6 from "/media/gallery-6.jfif";
-import image7 from "/media/gallery-7.jfif";
-import image8 from "/media/gallery-8.jfif";
-import image9 from "/media/gallery-9.jfif";
-import image10 from "/media/gallery-10.jfif";
-import image11 from "/media/gallery-11.jfif";
-import image12 from "/media/gallery-12.jfif";
-import image13 from "/media/gallery-13.jfif";
+import image1 from "/media/gallery-1.jpeg";
+import image2 from "/media/gallery-2.jpeg";
+import image3 from "/media/gallery-3.jpeg";
+import image4 from "/media/gallery-4.jpeg";
+import image5 from "/media/gallery-5.jpeg";
+import image6 from "/media/gallery-6.jpeg";
+import image7 from "/media/gallery-7.jpeg";
+import image8 from "/media/gallery-8.jpeg";
+import image9 from "/media/gallery-9.jpeg";
+import image10 from "/media/gallery-10.jpeg";
+import image11 from "/media/gallery-11.jpeg";
+import image12 from "/media/gallery-12.jpeg";
+import image13 from "/media/gallery-13.jpeg";
 import locationIcon from "/media/location.svg";
 import "../utils/Media.css";
 import AnimatedButton from "../components/AnimatedButton";
@@ -79,7 +79,7 @@ export default function Media() {
                 "min-[850px]:col-span-2"
               }`}
             >
-              <img src={element} alt="Image-1" />
+              <img src={element} alt={`Image-${index+1}`} loading="lazy" className="object-cover object-center h-full w-full"/>
               <div className="circle top-left-circle max-[850px]:hidden">
                 <div className="small-underline">2023</div>
                 <p>March 1</p>
