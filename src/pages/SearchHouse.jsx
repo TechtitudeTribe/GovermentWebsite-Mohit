@@ -36,11 +36,11 @@ export default function SearchHouse() {
     onOpen: tableModalOnOpen,
     onClose: tableModalOnClose,
   } = useDisclosure();
-  const {
-    isOpen: paymentMethodModalisOpen,
-    onOpen: paymentMethodModalOnOpen,
-    onClose: paymentMethodModalOnClose,
-  } = useDisclosure();
+  // const {
+  //   isOpen: paymentMethodModalisOpen,
+  //   onOpen: paymentMethodModalOnOpen,
+  //   onClose: paymentMethodModalOnClose,
+  // } = useDisclosure();
   // const { language } = useContext(LanguageContext);
   //For now only hindi language will be used
   const language  = "hindi"
@@ -188,7 +188,7 @@ export default function SearchHouse() {
     }
   };
   
-  async function downloaddPDF () {
+  const downloaddPDF = () => {
     const pdf = new jsPDF();
     if (language === "hindi") {
       pdf.addFileToVFS("Kruti-Dev-010.ttf", krutiBase64);
@@ -603,12 +603,12 @@ export default function SearchHouse() {
                 ? `fVIi.kh%& vH;qfDr LrEHk esa vkns'k dh dh la[;k rFkk fnukad] ;fn dksbZ gks] ftlds }kjk dksbZ uke c<+k;k ;k gVk;k x;k gks] ds lkFk izfof"V djus okys ds gLrk{kj Hkh fd;s tkus pkfg;sA`
                 : "In the Remarks column, the number and date of the order, if any, by which a name has been added or deleted, should also be mentioned along with the signature of the person making the entry."}
             </Text>
-            <button className="py-2 px-4 bg-primary text-white text-lg rounded-md m-3" onClick={paymentMethodModalOnOpen}>Download as PDF</button>
+            <button className="py-2 px-4 bg-primary text-white text-lg rounded-md m-3" onClick={downloaddPDF}>Download as PDF</button>
           </ModalFooter>
         </ModalContent>
       </Modal>
 
-      <Modal
+      {/* <Modal
         isOpen={paymentMethodModalisOpen}
         onClose={paymentMethodModalOnClose}
         size={"xl"}
@@ -645,7 +645,7 @@ export default function SearchHouse() {
             </div>
           </ModalBody>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }
