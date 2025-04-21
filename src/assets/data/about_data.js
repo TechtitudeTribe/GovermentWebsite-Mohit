@@ -9,6 +9,9 @@ import personality3Image from "/about-us/personality-3.jpeg";
 import personality4Image from "/about-us/personality-4.jpeg";
 import personality5Image from "/about-us/personality-5.jpeg";
 import personality6Image from "/about-us/personality-6.jpeg";
+import personality7Image from "/about-us/personality-7.jpeg";
+import personality8Image from "/about-us/personality-8.jpeg";
+import personality9Image from "/about-us/personality-9.jpeg";
 export const heroTextsData = [
   {
     english:
@@ -295,6 +298,39 @@ export const personCard5 = {
   };
 export const personCard6 = {
     image: personality6Image,
+    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+    designation: { english: "Designation", hindi: "पद का नाम" },
+    description: {
+      english:
+        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+      hindi:
+        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+    },
+  };
+export const personCard7 = {
+    image: personality7Image,
+    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+    designation: { english: "Designation", hindi: "पद का नाम" },
+    description: {
+      english:
+        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+      hindi:
+        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+    },
+  };
+export const personCard8 = {
+    image: personality8Image,
+    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+    designation: { english: "Designation", hindi: "पद का नाम" },
+    description: {
+      english:
+        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+      hindi:
+        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+    },
+  };
+export const personCard9 = {
+    image: personality9Image,
     name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
     designation: { english: "Designation", hindi: "पद का नाम" },
     description: {

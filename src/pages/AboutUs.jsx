@@ -1,4 +1,4 @@
-import HeroImage from "/about-image-1.jfif";
+import HeroImage from "/about-image-1.jpeg";
 import preciousWordsImage from "/about-us/precious-words-image.jpeg";
 import leafsDesign from "/leafs-design.svg";
 import startingQuotes from "/starting-quotes.svg";
@@ -20,12 +20,15 @@ import {
   personCard4,
   personCard5,
   personCard6,
+  personCard7,
+  personCard8,
+  personCard9,
 } from "../assets/data/about_data";
 export default function AboutUs() {
   const { language } = useContext(LanguageContext);
 
   const slideProperties = {
-    duration: 1500,
+    duration: 2500,
     autoplay: true,
     transitionDuration: 500,
     arrows: false,
@@ -99,6 +102,9 @@ export default function AboutUs() {
     personCard4,
     personCard5,
     personCard6,
+    personCard7,
+    personCard8,
+    personCard9,
   ]);
   useEffect(() => {
     const updateAwardCards = () => {
@@ -111,10 +117,16 @@ export default function AboutUs() {
             personCard4,
             personCard5,
             personCard6,
+            personCard7,
+            personCard8,
+            personCard9,
           ]
         : [
             [personCard1, personCard2, personCard3],
             [personCard4, personCard5, personCard6],
+            [  personCard7,
+              personCard8,
+              personCard9]
           ];
       setImportantPerson(updatedSlides);
     };
