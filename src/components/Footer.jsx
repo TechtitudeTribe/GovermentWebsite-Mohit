@@ -91,7 +91,7 @@ export default function Footer({ active }) {
           ))}
         </div>
         <div>
-          <h2 className="gradient-border-left text-4xl w-fit">
+          <h2 className="gradient-border-left text-4xl w-fit pt-1">
             {language === "hindi" ? "त्वरित सम्पक" : "Quick Links"}
           </h2>
           {quickLLinks.map((link) => (

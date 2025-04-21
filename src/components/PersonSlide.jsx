@@ -16,6 +16,7 @@ export default function PersonSlide({ details }) {
       <img
         src={details.image}
         alt={details.name[language]}
+        loading="lazy"
         className="card-image w-full min-h-[300px] object-cover"
       />
       <div
