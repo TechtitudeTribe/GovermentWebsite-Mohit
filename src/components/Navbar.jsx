@@ -47,6 +47,7 @@ export default function Navbar({ active }) {
   ];
   const handleLogout = ()=>{
     setUser(null) 
+    localStorage.removeItem("auth")
     onModalClose()
     toast({
       title:"Logged out successfully",

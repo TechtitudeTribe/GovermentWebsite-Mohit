@@ -10,7 +10,7 @@ function AuthProvider({ children }) {
     localStorage.removeItem("auth");
   }
   const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("auth")) || null
+    JSON.parse(localStorage.getItem("auth")) || {token:null}
   );
   return (
     <AuthContext.Provider value={{ user, setUser }}>
