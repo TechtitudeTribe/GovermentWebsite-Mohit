@@ -15,8 +15,7 @@ async function createHindiDataTable() {
         mobile_no VARCHAR(10) DEFAULT '',
         "name" TEXT NOT NULL,
         occupation TEXT DEFAULT NULL,
-        shachhar TEXT DEFAULT NULL,
-        FOREIGN KEY (id) REFERENCES english_data(id) ON DELETE CASCADE
+        shachhar TEXT DEFAULT NULL
     );
     `;
     await pool.query(query);
