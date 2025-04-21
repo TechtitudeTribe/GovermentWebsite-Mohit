@@ -5,6 +5,15 @@ import whiteCorner from "/white-corner.svg";
 import leafsDesign from "/leafs-design.svg";
 import avatar from "/dummy-avatar.svg";
 import awardImage from "/award.webp";
+import personality1Image from "/about-us/personality-1.jpg";
+import personality2Image from "/about-us/personality-2.jpeg";
+import personality3Image from "/about-us/personality-3.jpeg";
+import personality4Image from "/about-us/personality-4.jpeg";
+import personality5Image from "/about-us/personality-5.jpeg";
+import personality6Image from "/about-us/personality-6.jpeg";
+import personality7Image from "/about-us/personality-7.jpeg";
+import personality8Image from "/about-us/personality-8.jpeg";
+import personality9Image from "/about-us/personality-9.jpeg";
 import homeIcon from "/home-icon.svg";
 import startingQuotes from "/starting-quotes.svg";
 import { useContext, useEffect, useState } from "react";
@@ -141,8 +150,11 @@ export default function Home() {
   const testimonials = [
     {
       image: avatar,
-      heading: { english: "Testimonial Heading 1", hindi: "प्रशंसापत्र शीर्षक 1" },
-      description:{
+      heading: {
+        english: "Testimonial Heading 1",
+        hindi: "प्रशंसापत्र शीर्षक 1",
+      },
+      description: {
         english:
           "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
         hindi:
@@ -150,13 +162,16 @@ export default function Home() {
       },
       name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
       designation: { english: "Designation", hindi: "पद का नाम" },
-      department:{ english: "Department", hindi: "विभाग" },
-      city:{ english: "City name", hindi: "शहर का नाम" }
+      department: { english: "Department", hindi: "विभाग" },
+      city: { english: "City name", hindi: "शहर का नाम" },
     },
     {
       image: avatar,
-      heading: { english: "Testimonial Heading 2", hindi: "प्रशंसापत्र शीर्षक 2" },
-      description:{
+      heading: {
+        english: "Testimonial Heading 2",
+        hindi: "प्रशंसापत्र शीर्षक 2",
+      },
+      description: {
         english:
           "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
         hindi:
@@ -164,31 +179,53 @@ export default function Home() {
       },
       name: { english: "Person Name 2", hindi: "व्यक्ति का नाम 2" },
       designation: { english: "Designation", hindi: "पद का नाम" },
-      department:{ english: "Department", hindi: "विभाग" },
-      city:{ english: "City name", hindi: "शहर का नाम" }
+      department: { english: "Department", hindi: "विभाग" },
+      city: { english: "City name", hindi: "शहर का नाम" },
     },
   ];
   const { language } = useContext(LanguageContext);
   const [awardCards, setAwardCards] = useState([
-    awardCard,
-    awardCard,
-    awardCard,
-    awardCard,
-    awardCard,
-    awardCard,
-    awardCard,
-    awardCard,
-    awardCard,
+    { ...awardCard, image: personality1Image },
+    { ...awardCard, image: personality2Image },
+    { ...awardCard, image: personality3Image },
+    { ...awardCard, image: personality4Image },
+    { ...awardCard, image: personality5Image },
+    { ...awardCard, image: personality6Image },
+    { ...awardCard, image: personality7Image },
+    { ...awardCard, image: personality8Image },
+    { ...awardCard, image: personality9Image },
   ]);
   useEffect(() => {
     const updateAwardCards = () => {
       const isSmallScree = window.innerWidth < 1024;
       const updatedSlides = isSmallScree
-        ? awardCards
+        ? [
+            { ...awardCard, image: personality1Image },
+            { ...awardCard, image: personality2Image },
+            { ...awardCard, image: personality3Image },
+            { ...awardCard, image: personality4Image },
+            { ...awardCard, image: personality5Image },
+            { ...awardCard, image: personality6Image },
+            { ...awardCard, image: personality7Image },
+            { ...awardCard, image: personality8Image },
+            { ...awardCard, image: personality9Image },
+          ]
         : [
-            awardCards.slice(0, 3),
-            awardCards.slice(3, 6),
-            awardCards.slice(6, 9),
+            [
+              { ...awardCard, image: personality1Image },
+              { ...awardCard, image: personality2Image },
+              { ...awardCard, image: personality3Image },
+            ],
+            [
+              { ...awardCard, image: personality4Image },
+              { ...awardCard, image: personality5Image },
+              { ...awardCard, image: personality6Image },
+            ],
+            [
+              { ...awardCard, image: personality7Image },
+              { ...awardCard, image: personality8Image },
+              { ...awardCard, image: personality9Image },
+            ],
           ];
       setAwardCards(updatedSlides);
     };
@@ -402,7 +439,7 @@ export default function Home() {
         </div>
         <div id="home-slideshow-3" className=" m-auto">
           <Slide {...slideProperties}>
-            {testimonials.map((testimonial, index)=> (
+            {testimonials.map((testimonial, index) => (
               <div key={index} className="w-fit m-auto text-center p-4">
                 <img
                   src={startingQuotes}
@@ -413,14 +450,16 @@ export default function Home() {
                   {testimonial.heading[language]}
                 </h4>
                 <p className="min-[800px]:w-8/12 m-auto my-4 font-light">
-                {testimonial.description[language]}
+                  {testimonial.description[language]}
                 </p>
                 <img src={avatar} alt="human-avatar" className="m-auto my-4" />
                 <h5 className="my-2 font-medium text-xl">
-                {testimonial.name[language]}
+                  {testimonial.name[language]}
                 </h5>
                 <p className="font-light">
-                {testimonial.designation[language]}, {testimonial.department[language]} - {testimonial.city[language]}
+                  {testimonial.designation[language]},{" "}
+                  {testimonial.department[language]} -{" "}
+                  {testimonial.city[language]}
                 </p>
               </div>
             ))}
