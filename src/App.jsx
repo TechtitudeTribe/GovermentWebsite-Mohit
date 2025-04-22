@@ -35,7 +35,7 @@ function App() {
         setUser(null)
         localStorage.setItem('auth',null)
       }else{
-        return
+        setUser(null)
       }
     }
   }
