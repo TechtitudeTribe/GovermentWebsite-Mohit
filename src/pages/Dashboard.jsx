@@ -286,21 +286,21 @@ export default function Dashboard() {
   const generatePDF = async (data) => {
   try {
     setPDFDownloading(data.id)
-    let doc_name =`${data.house_owner}`
-      if (language === "english") {
-        const response = await axios.get(
-          `${API_URL}/data/hindi/get-one/${data.id}`,
-          { headers: { Authorization: `Bearer ${user.token}` } }
-        );
-        data = { ...data, ...response.data.data };
-      }
-      if(language === 'hindi'){
-        const response = await axios.get(
-          `${API_URL}/data/english/get-one/${data.id}`,
-          { headers: { Authorization: `Bearer ${user.token}` } }
-        );
-        doc_name = response.data.data.house_owner
-      }
+    // let doc_name =`${data.house_owner}`
+    //   if (language === "english") {
+    //     const response = await axios.get(
+    //       `${API_URL}/data/hindi/get-one/${data.id}`,
+    //       { headers: { Authorization: `Bearer ${user.token}` } }
+    //     );
+    //     data = { ...data, ...response.data.data };
+    //   }
+    //   if(language === 'hindi'){
+    //     const response = await axios.get(
+    //       `${API_URL}/data/english/get-one/${data.id}`,
+    //       { headers: { Authorization: `Bearer ${user.token}` } }
+    //     );
+    //     doc_name = response.data.data.house_owner
+    //   }
       const qrCodeDataUrl = await QRCode.toDataURL(data.id);
       const width = 270;
       const height = 180;
@@ -340,7 +340,7 @@ export default function Dashboard() {
 
       doc.addImage(qrCodeDataUrl, "PNG", width - 77, height - 77, 70, 70);
 
-      doc.save(`${doc_name}.pdf`);
+      doc.save(`qr-details.pdf`);
     } catch (error) {
       toast({
         title: error.response?.data.message || error.message,
