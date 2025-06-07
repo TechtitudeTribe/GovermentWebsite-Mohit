@@ -29,7 +29,7 @@ import {
   AlertDescription,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 // import { LanguageContext } from "../contexts/LanguageContext";
 //eslint-disable-next-line react/prop-types
 export default function Location({ active = "/Unknow" }) {
@@ -47,7 +47,7 @@ export default function Location({ active = "/Unknow" }) {
     "lk{kj ;k fuj{kj ¼lk{kj gksus dh n'kk esa vgZrk vkSj C;kSjk½",
     "lfdZy NksM+ nsus ;k e`R;q dk fnukad",
     "vH;qfDr",
-    "eksckby u0"
+    "eksckby u0",
   ];
   const englishTableHeaders = [
     "SL NO.",
@@ -62,8 +62,8 @@ export default function Location({ active = "/Unknow" }) {
     "Education",
     "Date of death",
     "Complaints",
-    "Mobile No."
-  ]
+    "Mobile No.",
+  ];
   function cleanText(input) {
     let cleaned = input.replace(/^\/+/, "").replace(/-/g, " ");
     cleaned = cleaned.replace(/\b\w/g, (char) => char.toUpperCase());
@@ -72,8 +72,8 @@ export default function Location({ active = "/Unknow" }) {
   const { user, setUser } = useContext(AuthContext);
   // const { language } = useContext(LanguageContext);
   //For now only hindi language will be used
-  const language  = "hindi"
-  
+  const language = "hindi";
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const navigate = useNavigate();
@@ -115,7 +115,11 @@ export default function Location({ active = "/Unknow" }) {
       },
       success: (response) => ({
         title: "Upload Successful",
-        description: `${response.data.insertedRows} data added successfully, ${response.data.duplicateRows>0 ? `${response.data.duplicateRows} duplicates ignored` : "No duplicates"}`,
+        description: `${response.data.insertedRows} data added successfully, ${
+          response.data.duplicateRows > 0
+            ? `${response.data.duplicateRows} duplicates ignored`
+            : "No duplicates"
+        }`,
         position: "top",
         duration: 5000,
       }),
@@ -129,7 +133,7 @@ export default function Location({ active = "/Unknow" }) {
       }),
     });
   };
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSingleDataSubmit = async (event) => {
     setIsSubmitting(true);
@@ -160,40 +164,43 @@ export default function Location({ active = "/Unknow" }) {
     };
     try {
       await axios.post(`${API_URL}/data/${language}/add-one`, data, {
-        headers: {Authorization:`bearer ${user.token}`},
+        headers: { Authorization: `bearer ${user.token}` },
       });
-      onClose()
-        toast({
-          position: "top",
-          duration: 5000,
-          render: () => (
-            <Alert status="success" display={"block"} borderRadius={"20px"}>
-              <Box className="flex items-center justify-start">
-                <AlertIcon />
-                <AlertTitle>Data added to database</AlertTitle>
-              </Box>
-              <AlertDescription>
-                <Text>
-                  {" "}
-                  <Text
-                    as="span"
-                    className={`${language === 'hindi' &&"font-kruti_dev "} text-xl font-semibold`}
-                  >
-                    {name}
-                  </Text>{" "}
-                  added to house no {house_no} with house owner{" "}
-                  <Text
-                    as="span"
-                    className={`${language === 'hindi' &&"font-kruti_dev "} text-xl font-semibold`}
-                  >
-                    {house_owner}
-                  </Text>
+      onClose();
+      toast({
+        position: "top",
+        duration: 5000,
+        render: () => (
+          <Alert status="success" display={"block"} borderRadius={"20px"}>
+            <Box className="flex items-center justify-start">
+              <AlertIcon />
+              <AlertTitle>Data added to database</AlertTitle>
+            </Box>
+            <AlertDescription>
+              <Text>
+                {" "}
+                <Text
+                  as="span"
+                  className={`${
+                    language === "hindi" && "font-kruti_dev "
+                  } text-xl font-semibold`}
+                >
+                  {name}
+                </Text>{" "}
+                added to house no {house_no} with house owner{" "}
+                <Text
+                  as="span"
+                  className={`${
+                    language === "hindi" && "font-kruti_dev "
+                  } text-xl font-semibold`}
+                >
+                  {house_owner}
                 </Text>
-              </AlertDescription>
-            </Alert>
-          ),
-        });
-
+              </Text>
+            </AlertDescription>
+          </Alert>
+        ),
+      });
     } catch (error) {
       if (!error.response) {
         toast({
@@ -229,7 +236,9 @@ export default function Location({ active = "/Unknow" }) {
                       {error.response.data.message}{" "}
                       <Text
                         as="span"
-                       className={`${language === 'hindi' &&"font-kruti_dev "} text-xl font-semibold`}
+                        className={`${
+                          language === "hindi" && "font-kruti_dev "
+                        } text-xl font-semibold`}
                       >
                         {error.response.data.existingHouseOwner}
                       </Text>
@@ -253,7 +262,9 @@ export default function Location({ active = "/Unknow" }) {
                       {" "}
                       <Text
                         as="span"
-                       className={`${language === 'hindi' &&"font-kruti_dev "} text-xl font-semibold`}
+                        className={`${
+                          language === "hindi" && "font-kruti_dev "
+                        } text-xl font-semibold`}
                       >
                         {name}
                       </Text>{" "}
@@ -261,7 +272,9 @@ export default function Location({ active = "/Unknow" }) {
                       house owner{" "}
                       <Text
                         as="span"
-                       className={`${language === 'hindi' &&"font-kruti_dev "} text-xl font-semibold`}
+                        className={`${
+                          language === "hindi" && "font-kruti_dev "
+                        } text-xl font-semibold`}
                       >
                         {house_owner}
                       </Text>
@@ -274,7 +287,9 @@ export default function Location({ active = "/Unknow" }) {
         } else {
           toast({
             title: "Failed to add data.",
-            description: error.response?.data.message|| "Error in server, please try again",
+            description:
+              error.response?.data.message ||
+              "Error in server, please try again",
             position: "top",
             status: "error",
             duration: 5000,
@@ -293,6 +308,10 @@ export default function Location({ active = "/Unknow" }) {
       </h4>
       {active === "/dashboard" && user?.token && (
         <div className="flex flex-col sm:flex-row gap-4">
+          <NavLink to="/attendance">
+            {" "}
+            <Button colorScheme="orange">Attendance</Button>
+          </NavLink>
           <Popover>
             <PopoverTrigger>
               <Button colorScheme="green">Upload Excel File</Button>
@@ -325,15 +344,23 @@ export default function Location({ active = "/Unknow" }) {
           <ModalHeader>Add Single Data</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          {/* <p className="text-red-600 opacity-75 mb-2">*Please cross check the language before uploading</p> */}
+            {/* <p className="text-red-600 opacity-75 mb-2">*Please cross check the language before uploading</p> */}
             <form
               onSubmit={handleSingleDataSubmit}
               className="grid grid-cols-2"
             >
-              {(language ==='english' ? englishTableHeaders :  hindiTableHeaders).map(
+              {(language === "english"
+                ? englishTableHeaders
+                : hindiTableHeaders
+              ).map(
                 (ele, index) =>
                   index !== 0 && (
-                    <div key={index} className={`${language==='hindi' && "font-kruti_dev" } text-xl my-1`}>
+                    <div
+                      key={index}
+                      className={`${
+                        language === "hindi" && "font-kruti_dev"
+                      } text-xl my-1`}
+                    >
                       <label>{ele}</label>
                       <br />
                       <input
