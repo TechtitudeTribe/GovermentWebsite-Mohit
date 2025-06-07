@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
-import awardBadge from '/award.svg'
-import calendarIcon from '/calendar.svg'
+import awardBadge from '../assets/icons/award.svg'
+import calendarIcon from '../assets/icons/calendar.svg'
 import { LanguageContext } from '../contexts/LanguageContext';
 /*eslint-disable react/prop-types*/
 export default function AwardsCard({ details }) {

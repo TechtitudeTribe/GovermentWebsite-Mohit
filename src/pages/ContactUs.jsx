@@ -1,8 +1,8 @@
-import leafsDesign from "/leafs-design.svg";
-import humanIcon from "/human-icon.svg";
-import telephoneIcon from "/telephone-icon.svg";
-import mailIcon from "/mail-icon.svg";
-import messageIcon from "/message-icon.svg";
+import leafsDesign from "../assets/icons/leafs-design.svg";
+import humanIcon from "../assets/icons/human-icon.svg";
+import telephoneIcon from "../assets/icons/telephone-icon.svg";
+import mailIcon from "../assets/icons/mail-icon.svg";
+import messageIcon from "../assets/icons/message-icon.svg";
 import AnimatedButton from "../components/AnimatedButton";
 export default function ContactUs() {
   return (

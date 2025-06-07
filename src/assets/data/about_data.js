@@ -1,17 +1,17 @@
-import libraryImage from "/about-us/library.jpeg";
-import playgroundImage from "/about-us/playground.jpg";
-import securityCameraImage from "/about-us/security-camera.jpg";
-import midDayMealImage from "/about-us/mid-day-meal.jpg";
-import selfHelpGroupImage from "/about-us/self-help-group.jpg";
-import personality1Image from "/about-us/personality-1.jpg";
-import personality2Image from "/about-us/personality-2.jpeg";
-import personality3Image from "/about-us/personality-3.jpeg";
-import personality4Image from "/about-us/personality-4.jpeg";
-import personality5Image from "/about-us/personality-5.jpeg";
-import personality6Image from "/about-us/personality-6.jpeg";
-import personality7Image from "/about-us/personality-7.jpeg";
-import personality8Image from "/about-us/personality-8.jpeg";
-import personality9Image from "/about-us/personality-9.jpeg";
+import libraryImage from "../Images/about-us/library.jpg";
+import playgroundImage from "../Images/about-us/playground.jpg";
+import securityCameraImage from "../Images/about-us/security-camera.jpg";
+import midDayMealImage from "../Images/about-us/mid-day-meal.jpg";
+import selfHelpGroupImage from "../Images/about-us/self-help-group.jpg";
+import personality1Image from "../Images/about-us/personality-1.jpg";
+import personality2Image from "../Images/about-us/personality-2.jpeg";
+import personality3Image from "../Images/about-us/personality-3.jpeg";
+import personality4Image from "../Images/about-us/personality-4.jpeg";
+import personality5Image from "../Images/about-us/personality-5.jpeg";
+import personality6Image from "../Images/about-us/personality-6.jpeg";
+import personality7Image from "../Images/about-us/personality-7.jpeg";
+import personality8Image from "../Images/about-us/personality-8.jpeg";
+import personality9Image from "../Images/about-us/personality-9.jpeg";
 export const heroTextsData = [
   {
     english:
@@ -242,101 +242,101 @@ export const benefitsData = [
 ];
 
 export const personCard1 = {
-    image: personality1Image,
-    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
-    designation: { english: "Designation", hindi: "पद का नाम" },
-    description: {
-      english:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-      hindi:
-        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
-    },
-  };
+  image: personality1Image,
+  name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+  designation: { english: "Designation", hindi: "पद का नाम" },
+  description: {
+    english:
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+    hindi:
+      "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+  },
+};
 export const personCard2 = {
-    image: personality2Image,
-    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
-    designation: { english: "Designation", hindi: "पद का नाम" },
-    description: {
-      english:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-      hindi:
-        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
-    },
-  };
+  image: personality2Image,
+  name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+  designation: { english: "Designation", hindi: "पद का नाम" },
+  description: {
+    english:
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+    hindi:
+      "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+  },
+};
 export const personCard3 = {
-    image: personality3Image,
-    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
-    designation: { english: "Designation", hindi: "पद का नाम" },
-    description: {
-      english:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-      hindi:
-        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
-    },
-  };
+  image: personality3Image,
+  name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+  designation: { english: "Designation", hindi: "पद का नाम" },
+  description: {
+    english:
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+    hindi:
+      "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+  },
+};
 export const personCard4 = {
-    image: personality4Image,
-    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
-    designation: { english: "Designation", hindi: "पद का नाम" },
-    description: {
-      english:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-      hindi:
-        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
-    },
-  };
+  image: personality4Image,
+  name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+  designation: { english: "Designation", hindi: "पद का नाम" },
+  description: {
+    english:
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+    hindi:
+      "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+  },
+};
 export const personCard5 = {
-    image: personality5Image,
-    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
-    designation: { english: "Designation", hindi: "पद का नाम" },
-    description: {
-      english:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-      hindi:
-        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
-    },
-  };
+  image: personality5Image,
+  name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+  designation: { english: "Designation", hindi: "पद का नाम" },
+  description: {
+    english:
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+    hindi:
+      "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+  },
+};
 export const personCard6 = {
-    image: personality6Image,
-    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
-    designation: { english: "Designation", hindi: "पद का नाम" },
-    description: {
-      english:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-      hindi:
-        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
-    },
-  };
+  image: personality6Image,
+  name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+  designation: { english: "Designation", hindi: "पद का नाम" },
+  description: {
+    english:
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+    hindi:
+      "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+  },
+};
 export const personCard7 = {
-    image: personality7Image,
-    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
-    designation: { english: "Designation", hindi: "पद का नाम" },
-    description: {
-      english:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-      hindi:
-        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
-    },
-  };
+  image: personality7Image,
+  name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+  designation: { english: "Designation", hindi: "पद का नाम" },
+  description: {
+    english:
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+    hindi:
+      "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+  },
+};
 export const personCard8 = {
-    image: personality8Image,
-    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
-    designation: { english: "Designation", hindi: "पद का नाम" },
-    description: {
-      english:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-      hindi:
-        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
-    },
-  };
+  image: personality8Image,
+  name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+  designation: { english: "Designation", hindi: "पद का नाम" },
+  description: {
+    english:
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+    hindi:
+      "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+  },
+};
 export const personCard9 = {
-    image: personality9Image,
-    name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
-    designation: { english: "Designation", hindi: "पद का नाम" },
-    description: {
-      english:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-      hindi:
-        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
-    },
-  };
+  image: personality9Image,
+  name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
+  designation: { english: "Designation", hindi: "पद का नाम" },
+  description: {
+    english:
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+    hindi:
+      "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
+  },
+};

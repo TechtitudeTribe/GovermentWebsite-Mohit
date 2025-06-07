@@ -1,15 +1,15 @@
-import HeroImage from "/about-image-1.jpeg";
-import preciousWordsImage from "/about-us/precious-words-image.jpeg";
-import leafsDesign from "/leafs-design.svg";
-import startingQuotes from "/starting-quotes.svg";
-import endingQuotes from "/ending-quotes.svg";
+import HeroImage from "../assets/Images/about-us/hero-image.jpg";
+import preciousWordsImage from "../assets/Images/about-us/precious-words-image.jpeg";
+import leafsDesign from "../assets/icons/leafs-design.svg";
+import startingQuotes from "../assets/icons/starting-quotes.svg";
+import endingQuotes from "../assets/icons/ending-quotes.svg";
 
 import { useContext, useEffect, useState } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
 import Facility from "../components/Facility";
 import { Slide } from "react-slideshow-image";
 import PersonSlide from "../components/PersonSlide";
-import gramPanchayatImage from "/about-us/gram-panchayat.jpeg";
+import gramPanchayatImage from "../assets/Images/about-us/gram-panchayat.jpeg";
 import {
   heroTextsData,
   preciousWordsData,

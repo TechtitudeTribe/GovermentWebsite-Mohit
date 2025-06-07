@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
-import logo from "/up-gov-logo.svg";
-import hamburgermenu from "/hamburger-menu.svg";
+import logo from "../assets/Images/up-gov-logo.svg";
+import hamburgermenu from "../assets/icons/hamburger-menu.svg";
 import { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import {

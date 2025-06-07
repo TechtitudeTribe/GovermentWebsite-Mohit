@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
-import leafsDesign from "/leafs-design.svg";
+import leafsDesign from "../assets/icons/leafs-design.svg";
 /*eslint-disable react/prop-types*/
 export default function Facility({ facility }) {
   const { language } = useContext(LanguageContext);

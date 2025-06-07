@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import facebookIcon from "/facebook.svg";
-import twitterIcon from "/twitter.svg";
+import facebookIcon from "../assets/icons/facebook.svg";
+import twitterIcon from "../assets/icons/twitter.svg";
 import { LanguageContext } from "../contexts/LanguageContext";
 export default function Header() {
   const { language, setLanguage } = useContext(LanguageContext);

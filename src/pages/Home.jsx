@@ -1,21 +1,20 @@
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
-import homeBanner1 from "/home-banner-1.png";
-import whiteCorner from "/white-corner.svg";
-import leafsDesign from "/leafs-design.svg";
-import avatar from "/dummy-avatar.svg";
-import awardImage from "/award.webp";
-import personality1Image from "/about-us/personality-1.jpg";
-import personality2Image from "/about-us/personality-2.jpeg";
-import personality3Image from "/about-us/personality-3.jpeg";
-import personality4Image from "/about-us/personality-4.jpeg";
-import personality5Image from "/about-us/personality-5.jpeg";
-import personality6Image from "/about-us/personality-6.jpeg";
-import personality7Image from "/about-us/personality-7.jpeg";
-import personality8Image from "/about-us/personality-8.jpeg";
-import personality9Image from "/about-us/personality-9.jpeg";
-import homeIcon from "/home-icon.svg";
-import startingQuotes from "/starting-quotes.svg";
+import homeBanner1 from "../assets/Images/home/home-banner-1.png";
+import whiteCorner from "../assets/Images/home/white-corner.svg";
+import leafsDesign from "../assets/icons/leafs-design.svg";
+import avatar from "../assets/Images/home/dummy-avatar.svg";
+import personality1Image from "../assets/Images/about-us/personality-1.jpg";
+import personality2Image from "../assets/Images/about-us/personality-2.jpeg";
+import personality3Image from "../assets/Images/about-us/personality-3.jpeg";
+import personality4Image from "../assets/Images/about-us/personality-4.jpeg";
+import personality5Image from "../assets/Images/about-us/personality-5.jpeg";
+import personality6Image from "../assets/Images/about-us/personality-6.jpeg";
+import personality7Image from "../assets/Images/about-us/personality-7.jpeg";
+import personality8Image from "../assets/Images/about-us/personality-8.jpeg";
+import personality9Image from "../assets/Images/about-us/personality-9.jpeg";
+import homeIcon from "../assets/Images/home/home-icon.svg";
+import startingQuotes from "../assets/icons/starting-quotes.svg";
 import { useContext, useEffect, useState } from "react";
 import AwardsCard from "../components/AwardsCard";
 import "../utils/Home.css";
@@ -124,7 +123,7 @@ export default function Home() {
   ];
 
   const awardCard = {
-    image: awardImage,
+    image: null,
     award_venue: {
       english: "Award name & venue",
       hindi: "पुरस्कार का नाम एवं स्थान",

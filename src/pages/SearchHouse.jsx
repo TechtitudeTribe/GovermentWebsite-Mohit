@@ -3,7 +3,7 @@ import {
    useEffect, 
    useState } from "react";
 import AnimatedButton from "../components/AnimatedButton";
-import syncIcon from "/sync-icon.svg";
+import syncIcon from "../assets/icons/sync-icon.svg";
 import axios from "axios";
 import {
   Modal,
