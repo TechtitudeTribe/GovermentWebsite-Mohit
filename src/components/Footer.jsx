@@ -1,10 +1,11 @@
-import logo from "/up-gov-logo.svg";
-import facebookIcon from "/facebook.svg";
-import twitterIcon from "/twitter.svg";
+import logo from "../assets/Images/up-gov-logo.svg";
+import facebookIcon from "../assets/icons/facebook.svg";
+import twitterIcon from "../assets/icons/twitter.svg";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
 /*eslint-disable react/prop-types*/
+import dharampuraMap from "../assets/Images/dharampura-map.jpg";
 export default function Footer({ active }) {
   const { language } = useContext(LanguageContext);
   const routes = [
@@ -37,25 +38,37 @@ export default function Footer({ active }) {
   return (
     <div className="">
       <section className="md:grid grid-cols-4 gap-8 xl:gap-20 p-6 min-[800px]:px-20">
-        <div className="col-span-2">
+        <div className="col-span-2 space-y-5">
           <div className="flex gap-2 items-center">
             <img src={logo} alt="logo" className="h-12 max-[520px]:m-auto" />
             <div className="text-blue-600 ">
               <h3 className="text-lg font-semibold">
-                {language ==='hindi'?"पंचायती राज विभाग":"Panchayati Raj Department"}
+                {language === "hindi"
+                  ? "पंचायती राज विभाग"
+                  : "Panchayati Raj Department"}
               </h3>
-              <p className="text-sm">{language==='hindi'?"उत्तर प्रदेश सरकार":"Government of Uttar Pradesh"}</p>
+              <p className="text-sm">
+                {language === "hindi"
+                  ? "उत्तर प्रदेश सरकार"
+                  : "Government of Uttar Pradesh"}
+              </p>
             </div>
           </div>
-          <p className="font-medium my-4">
+          {/* <p className="font-medium my-4">
             {language === "hindi"
               ? `लोरेम इप्सम एक छद्म-लैटिन पाठ है जिसका उपयोग मुद्रण और टाइपसेटिंग उद्योगों में किया जाता है। 1500 के दशक के बाद से, जब एक अज्ञात प्रिंटर ने एक प्रकार की नमूना पुस्तक बनाने के लिए एक गैली टाइप किया, लोरेम इप्सम उद्योग का मानक डमी टेक्स्ट रहा है।`
               : `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
             aliquip ex ea commodo consequat.`}
-          </p>
-          <div className="flex gap-4 h-12 my-6">
+          </p> */}
+          <img
+            src={dharampuraMap}
+            loading="lazy"
+            alt="dharampura-map.jpg"
+            className="max-h-[250px]"
+          />
+          <div className="flex gap-4 h-12">
             <img src={facebookIcon} alt="facebook-icon" />
             <img src={twitterIcon} alt="twitter-icon" />
           </div>
