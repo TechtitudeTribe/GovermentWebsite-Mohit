@@ -10,9 +10,9 @@ const API_URL = import.meta.env.VITE_API_URL;
 function formatDate(dateInput) {
   const date = new Date(dateInput);
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so we add 1
-  const day = String(date.getDate()).padStart(2, '0');
-  
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based, so we add 1
+  const day = String(date.getDate()).padStart(2, "0");
+
   return `${year}-${month}-${day}`;
 }
 export default function Attendance() {
@@ -23,26 +23,38 @@ export default function Attendance() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   // const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selection,setSelection] = useState({selectedDate:new Date(),start:"",end:"",house_no:""})
-  const onChange = (newDate) =>setSelection(prev=>({...prev,selectedDate:newDate,start:"",end:""}));
-  
+  const [selection, setSelection] = useState({
+    selectedDate: new Date(),
+    start: "",
+    end: "",
+    house_no: "",
+  });
+  const onChange = (newDate) =>
+    setSelection((prev) => ({
+      ...prev,
+      selectedDate: newDate,
+      start: "",
+      end: "",
+    }));
+
   const tileClassName = ({ date, view }) => {
-    let className = 'min-h-[60px] min-w-[60px] rounded-xl'
+    let className = "min-h-[60px] min-w-[60px] rounded-xl";
     if (date.toDateString() === selection.selectedDate?.toDateString()) {
-      className+= " bg-primary text-white"; 
+      className += " bg-primary text-white";
+    } else {
+      className += " bg-[#D9D9D9]";
     }
-    else{
-      className+= ' bg-[#D9D9D9]'
-    }
-    return className
+    return className;
   };
   async function getAttendance() {
     setIsLoading(true);
     try {
-      let query = ``
-      if(selection.selectedDate) query+= `date=${formatDate(selection.selectedDate)}`
-      else if(selection.start && selection.end) query+=`start=${selection.start}&end=${selection.end}`
-      if(selection.house_no)query+=`&house_no=${selection.house_no}`
+      let query = ``;
+      if (selection.selectedDate)
+        query += `date=${formatDate(selection.selectedDate)}`;
+      else if (selection.start && selection.end)
+        query += `start=${selection.start}&end=${selection.end}`;
+      if (selection.house_no) query += `&house_no=${selection.house_no}`;
       const response = await axios.get(`${API_URL}/attendance?${query}`);
       setAttendance(response.data);
     } catch (error) {
@@ -79,22 +91,26 @@ export default function Attendance() {
     link.download = "attendance.xlsx"; // The name of the file to be downloaded
     link.click();
   };
-  useEffect(function overwriteDefaultCss()  {
+  useEffect(function overwriteDefaultCss() {
     // Select all abbr elements within the calendar weekday names
-    const abbrTags = document.querySelectorAll('.react-calendar__month-view__weekdays__weekday abbr');
+    const abbrTags = document.querySelectorAll(
+      ".react-calendar__month-view__weekdays__weekday abbr"
+    );
     abbrTags.forEach((abbr) => {
-      abbr.removeAttribute('title');  // Remove the title attribute to remove underline (dots)
+      abbr.removeAttribute("title"); // Remove the title attribute to remove underline (dots)
     });
-    const daysContainer = document.querySelector('.react-calendar__month-view__days');
-    
+    const daysContainer = document.querySelector(
+      ".react-calendar__month-view__days"
+    );
+
     // Applying grid layout for calendar component
     if (daysContainer) {
-      daysContainer.style.display = 'grid';
-      daysContainer.style.gridTemplateColumns = 'repeat(7, 1fr)';
-      daysContainer.style.gap = '10px'; 
+      daysContainer.style.display = "grid";
+      daysContainer.style.gridTemplateColumns = "repeat(7, 1fr)";
+      daysContainer.style.gap = "10px";
     }
-  }, []); 
-    useEffect(() => {
+  }, []);
+  useEffect(() => {
     if (!user) {
       navigate("/login");
       return;
@@ -103,59 +119,91 @@ export default function Attendance() {
   return (
     <main className="p-4 sm:p-10 bg-mid_gray flex flex-col items-center gap-6">
       <h3 className="text-4xl sm:text-6xl">Attendance</h3>
-      <div>
-        <Calendar
-          onChange={onChange}
-          value={selection.selectedDate}
-          tileClassName={tileClassName}
-          view="month" // Restrict view to only the month view
-          minDetail="month" // Prevent navigation to years or decades
-          prev2Label={null} // Hide the double left (year jump) button
-          next2Label={null} // Hide the double right (year jump) button
-          prevLabel={<Icon as={ChevronLeftIcon} boxSize={10}/>} 
-          nextLabel={<Icon as={ChevronRightIcon} boxSize={10}/>}
-          className="bg-[#EEEBE7] text-center p-5 rounded-xl text-lg"
-        />
-      </div>
-      <div className="flex gap-4">
+      <section className="flex flex-col lg:flex-row items-center gap-4 xl:gap-8">
         <div>
-          <p>Start Date</p>
-        <input type="date" value={selection.start} onChange={(e)=>setSelection(prev=>({...prev,start:e.target.value,selectedDate:null}))} className="p-3 rounded-lg border border-primary min-w-[250px]" />
+          <Calendar
+            onChange={onChange}
+            value={selection.selectedDate}
+            tileClassName={tileClassName}
+            view="month" // Restrict view to only the month view
+            minDetail="month" // Prevent navigation to years or decades
+            prev2Label={null} // Hide the double left (year jump) button
+            next2Label={null} // Hide the double right (year jump) button
+            prevLabel={<Icon as={ChevronLeftIcon} boxSize={10} />}
+            nextLabel={<Icon as={ChevronRightIcon} boxSize={10} />}
+            className="bg-[#EEEBE7] text-center p-5 rounded-xl text-lg"
+          />
         </div>
-        <div>
-          <p>End Date</p>
-        <input type="date" value={selection.end} onChange={(e)=>setSelection(prev=>({...prev,end:e.target.value,selectedDate:null}))} className="p-3 rounded-lg border border-primary min-w-[250px]"/>
-        </div>
-
-      </div>
-      <div className="flex flex-col ">
-        <p className="text-sm">*Optional</p>
-      <input
-          type="number"
-          placeholder="Enter house number"
-          value={selection.house_no}
-          onChange={(e)=>setSelection(prev=>({...prev,house_no:e.target.value}))}
-          className="p-3 rounded-lg border border-primary min-w-[250px] outline-none"
-        />
-        <button
-          type="submit"
-          className="mt-2 min-w-[100px] p-2 rounded-xl bg-primary text-white text-lg font-medium disabled:opacity-50 disabled:cursor-progress"
-          disabled={isLoading || (!selection.selectedDate && (!selection.start || !selection.end))}
-          onClick={getAttendance}
-        >
-          {isLoading ? (
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="green.500"
-              size="lg"
+        <div className="space-y-4">
+          <div className="flex gap-4">
+            <div>
+              <p>Start Date</p>
+              <input
+                type="date"
+                value={selection.start}
+                onChange={(e) =>
+                  setSelection((prev) => ({
+                    ...prev,
+                    start: e.target.value,
+                    selectedDate: null,
+                  }))
+                }
+                className="p-3 rounded-lg border border-primary min-w-[250px]"
+              />
+            </div>
+            <div>
+              <p>End Date</p>
+              <input
+                type="date"
+                value={selection.end}
+                onChange={(e) =>
+                  setSelection((prev) => ({
+                    ...prev,
+                    end: e.target.value,
+                    selectedDate: null,
+                  }))
+                }
+                className="p-3 rounded-lg border border-primary min-w-[250px]"
+              />
+            </div>
+          </div>{" "}
+          <div className="flex flex-col gap-2">
+            <p className="text-sm">*Optional</p>
+            <input
+              type="number"
+              placeholder="Enter house number"
+              value={selection.house_no}
+              onChange={(e) =>
+                setSelection((prev) => ({ ...prev, house_no: e.target.value }))
+              }
+              className="p-3 rounded-lg border border-primary min-w-[250px] outline-none"
             />
-          ) : (
-            <p>Get Attendance</p>
-          )}
-        </button>
-      </div>
+            <button
+              type="submit"
+              className="mt-2 min-w-[100px] p-2 rounded-xl bg-primary text-white text-lg font-medium disabled:opacity-50 disabled:cursor-progress"
+              disabled={
+                isLoading ||
+                (!selection.selectedDate &&
+                  (!selection.start || !selection.end))
+              }
+              onClick={getAttendance}
+            >
+              {isLoading ? (
+                <Spinner
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="green.500"
+                  size="lg"
+                />
+              ) : (
+                <p>Get Attendance</p>
+              )}
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* <form
         onSubmit={getAttendance}
         className="flex flex-col sm:flex-row gap-4"
@@ -214,12 +262,8 @@ export default function Attendance() {
                     <td className="p-2">{item.house_no}</td>
                     <td className="p-2">{item.house_owner}</td>
                     <td className="p-2">{item.attended_by}</td>
-                    <td className="p-2">
-                      {item.date}
-                    </td>
-                    <td className="p-2">
-                      {item.time}
-                    </td>
+                    <td className="p-2">{item.date}</td>
+                    <td className="p-2">{item.time}</td>
                   </tr>
                 ))}
               </tbody>
@@ -235,7 +279,9 @@ export default function Attendance() {
         ) : isError ? (
           <p className="text-xl font-medium text-red-500">{isError}</p>
         ) : (
-          <p className="text-xl font-medium">Select date or range of dates to search</p>
+          <p className="text-xl font-medium">
+            Select date or range of dates to search
+          </p>
         )}
       </section>
     </main>
