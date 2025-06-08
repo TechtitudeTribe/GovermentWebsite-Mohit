@@ -49,7 +49,7 @@ export default function Dashboard() {
   const [sync, setSync] = useState(false);
   const toggleSynce = () => setSync((prev) => !prev);
   const [isPDFDownloading, setPDFDownloading] = useState(null);
-  const [isZipDownloading, setZipDownloading] = useState(null);
+  const [isZipDownloading, setZipDownloading] = useState(false);
   const {
     isOpen: isEditModalOpen,
     onOpen: onEditModalOpen,
@@ -365,67 +365,85 @@ export default function Dashboard() {
     setZipDownloading(true);
     const zip = new JSZip();
     try {
-      for (const data of tableData) {
-        if (data.name === data.house_owner) {
-          const qrCodeDataUrl = await QRCode.toDataURL(data.id);
-          const width = 270;
-          const height = 180;
-          const doc = new jsPDF("l", "mm", [width, height]);
+      //for non blocking thread
+      setTimeout(async () => {
+        for (const data of tableData) {
+          if (data.name === data.house_owner) {
+            const qrCodeDataUrl = await QRCode.toDataURL(data.id);
+            const width = 270;
+            const height = 180;
+            const doc = new jsPDF("l", "mm", [width, height]);
 
-          doc.addFileToVFS("Kruti-Dev-010.ttf", krutiBase64);
-          doc.addFont("Kruti-Dev-010.ttf", "Kruti-Dev-010", "normal");
+            doc.addFileToVFS("Kruti-Dev-010.ttf", krutiBase64);
+            doc.addFont("Kruti-Dev-010.ttf", "Kruti-Dev-010", "normal");
 
-          doc.setLineWidth(0.5); //Line width for horizontal line and border
-          doc.setDrawColor(0, 0, 0);
-          doc.rect(5, 5, width - 10, height - 10); // Border
+            doc.setLineWidth(0.5); //Line width for horizontal line and border
+            doc.setDrawColor(0, 0, 0);
+            doc.rect(5, 5, width - 10, height - 10); // Border
 
-          let currentY = 2;
-          const title = "xzke iapk;r /keZiqjk    fodkl [k.M gYnkSj    fctukSj";
-          doc.setFont("Kruti-Dev-010");
-          doc.setFontSize(38);
-          doc.text(
-            title,
-            (width - doc.getTextWidth(title)) / 2,
-            (currentY += 18)
-          );
+            let currentY = 2;
+            const title =
+              "xzke iapk;r /keZiqjk    fodkl [k.M gYnkSj    fctukSj";
+            doc.setFont("Kruti-Dev-010");
+            doc.setFontSize(38);
+            doc.text(
+              title,
+              (width - doc.getTextWidth(title)) / 2,
+              (currentY += 18)
+            );
 
-          doc.line(5, (currentY += 10), width - 5, currentY);
-          let currentX = 8;
-          doc.setFontSize(32);
+            doc.line(5, (currentY += 10), width - 5, currentY);
+            let currentX = 8;
+            doc.setFontSize(32);
 
-          const propertyOwner = `laifÙk ds ekfyd % ${data.house_owner}] vfHkHkkod % ${data.father_husband_name}`;
-          doc.setFont("Kruti-Dev-010");
-          const lines = doc.splitTextToSize(propertyOwner, width - 15);
-          lines.forEach((line) => doc.text(line, currentX, (currentY += 14)));
-          doc.text("lEiÙkh ds çdkj % vkoklh;", currentX, (currentY += 14));
+            const propertyOwner = `laifÙk ds ekfyd % ${data.house_owner}] vfHkHkkod % ${data.father_husband_name}`;
+            doc.setFont("Kruti-Dev-010");
+            const lines = doc.splitTextToSize(propertyOwner, width - 15);
+            lines.forEach((line) => doc.text(line, currentX, (currentY += 14)));
+            doc.text("lEiÙkh ds çdkj % vkoklh;", currentX, (currentY += 14));
 
-          doc.setFontSize(32);
-          doc.text(`vf}rh; la[;k % `, currentX, (currentY += 14));
-          doc.setFont("helvetica", "normal");
-          doc.setFontSize(28);
-          doc.text(
-            ` ${data.id}`,
-            currentX + doc.getTextWidth(`vf}rh; la[;k % `),
-            currentY
-          );
-          doc.setFont("Kruti-Dev-010");
-          doc.setFontSize(32);
-          doc.text(`?kj uacj  % ${data.house_no}`, currentX, (currentY += 14));
+            doc.setFontSize(32);
+            doc.text(`vf}rh; la[;k % `, currentX, (currentY += 14));
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(28);
+            doc.text(
+              ` ${data.id}`,
+              currentX + doc.getTextWidth(`vf}rh; la[;k % `),
+              currentY
+            );
+            doc.setFont("Kruti-Dev-010");
+            doc.setFontSize(32);
+            doc.text(
+              `?kj uacj  % ${data.house_no}`,
+              currentX,
+              (currentY += 14)
+            );
 
-          doc.addImage(qrCodeDataUrl, "PNG", width - 77, height - 77, 70, 70);
-          // doc.save(`${data.id}.pdf`)
-          zip.file(`${data.id}.pdf`, doc.output("arraybuffer"));
+            doc.addImage(qrCodeDataUrl, "PNG", width - 77, height - 77, 70, 70);
+            zip.file(`${data.id}.pdf`, doc.output("arraybuffer"));
+          }
         }
-      }
-      zip
-        .generateAsync({ type: "blob" })
-        .then((content) => {
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(content);
-          link.download = "all-pdfs.zip";
-          link.click();
-        })
-        .catch((err) => console.log(err));
+        zip
+          .generateAsync({ type: "blob" })
+          .then((content) => {
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(content);
+            link.download = "all-pdfs.zip";
+            link.click();
+            setZipDownloading(false);
+          })
+          .catch((error) => {
+            toast({
+              title: "Unable generate zip",
+              description: error.message,
+              status: "error",
+              position: "top",
+              duration: 5000,
+              isClosable: true,
+            });
+            setZipDownloading(false);
+          });
+      }, 0);
     } catch (error) {
       toast({
         title: "Unable generate zip",
@@ -435,8 +453,6 @@ export default function Dashboard() {
         duration: 5000,
         isClosable: true,
       });
-    } finally {
-      setZipDownloading(false);
     }
   }
   return (
