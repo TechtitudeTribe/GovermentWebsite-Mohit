@@ -4,138 +4,33 @@ import homeBanner1 from "../assets/Images/home/home-banner-1.png";
 import whiteCorner from "../assets/Images/home/white-corner.svg";
 import leafsDesign from "../assets/icons/leafs-design.svg";
 import avatar from "../assets/Images/home/dummy-avatar.svg";
-import personality1Image from "../assets/Images/about-us/personality-1.jpg";
-import personality2Image from "../assets/Images/about-us/personality-2.jpeg";
-import personality3Image from "../assets/Images/about-us/personality-3.jpeg";
-import personality4Image from "../assets/Images/about-us/personality-4.jpeg";
-import personality5Image from "../assets/Images/about-us/personality-5.jpeg";
-import personality6Image from "../assets/Images/about-us/personality-6.jpeg";
-import personality7Image from "../assets/Images/about-us/personality-7.jpeg";
-import personality8Image from "../assets/Images/about-us/personality-8.jpeg";
-import personality9Image from "../assets/Images/about-us/personality-9.jpeg";
 import homeIcon from "../assets/Images/home/home-icon.svg";
 import startingQuotes from "../assets/icons/starting-quotes.svg";
-import { useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import AwardsCard from "../components/AwardsCard";
 import "../utils/Home.css";
 import AnimatedButton from "../components/AnimatedButton";
 import { NavLink } from "react-router-dom";
 import { LanguageContext } from "../contexts/LanguageContext";
-
+import {
+  aboutTexts,
+  aboutCards,
+  awardtexts,
+  awardCard1,
+  awardCard2,
+  awardCard3,
+  awardCard4,
+  awardCard5,
+  awardCard6,
+  awardCard7,
+  awardCard8,
+  awardCard9,
+  benefit1,
+  benefit2,
+  benefit3,
+  benefit4,
+} from "../assets/data/home_data";
 export default function Home() {
-  const aboutTexts = [
-    {
-      english: `Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book.`,
-      hindi: `पशुधन पालन आम बात है और राज्य कृषि का एक अभिन्न अंग है जो ग्रामीण आबादी के
-             दो तिहाई से अधिक लोगों की आजीविका का समर्थन करता है। पशु पोषक तत्वों से भरपूर खाद्य
-              उत्पाद, भार वहन करने की शक्ति, जैविक खाद और घरेलू ईंधन के रूप में गोबर, खाल और
-              चमड़ा प्रदान करते हैं और ग्रामीण परिवारों के लिए नकद आय का एक नियमित स्रोत हैं`,
-    },
-    {
-      english: `“It has survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.”`,
-      hindi: `लोरेम इप्सम एक छद्म-लैटिन पाठ है जिसका उपयोग मुद्रण और टाइपसेटिंग उद्योगों में किया जाता है। 1500 के दशक के बाद से, जब एक अज्ञात प्रिंटर ने एक प्रकार की नमूना पुस्तक बनाने के लिए एक गैली टाइप किया, लोरेम इप्सम उद्योग का मानक डमी टेक्स्ट रहा है। यह न केवल पांच शताब्दियों तक जीवित रहा है, बल्कि इलेक्ट्रॉनिक टाइपसेटिंग में भी परिवर्तन हुआ है, जो अनिवार्य रूप से अपरिवर्तित है।`,
-    },
-    {
-      english: `Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore veritatis et quasi architecto beatae vitae
-              dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-              aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
-              eos qui ratione voluptatem sequi nesciunt`,
-      hindi: `यह एक सर्वविदित तथ्य है कि एक पाठक पृष्ठ की पठनीय सामग्री से उसके लेआउट को देखते समय विचलित हो जाएगा। लोरेम इप्सम का उपयोग करने का मुद्दा यह है कि इसमें 'यहां सामग्री, यहां सामग्री' का उपयोग करने के विपरीत, कम या ज्यादा सामान्य पत्र वितरण है, जो इसे पठनीय अंग्रेजी की तरह दिखता है। कई डेस्कटॉप प्रकाशन पैकेज और वेब पेज संपादक अब लोरेम इप्सम को अपने`,
-    },
-    {
-      english: `At vero eos et accusamus et iusto odio dignissimos ducimus qui
-              blanditiis praesentium voluptatum deleniti atque corrupti quos
-              dolores et quas molestias excepturi sint occaecati cupiditate non
-              provident, similique sunt in culpa qui officia deserunt mollitia
-              animi, id est laborum et dolorum fuga.`,
-      hindi: `लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर रिचर्ड मैक्लिंटॉक ने लोरेम इप्सम मार्ग से अधिक अस्पष्ट लैटिन शब्दों में से एक को देखा, और शास्त्रीय साहित्य `,
-    },
-  ];
-  const aboutCards = [
-    {
-      image: avatar,
-      name: { english: "Person Name 1", hindi: "व्यक्ति का नाम 1" },
-      designation: { english: "Designation", hindi: "पद का नाम" },
-      description: {
-        english:
-          "Sed ut perspiciatis unde omnis iste natus error sit voluptatem",
-        hindi:
-          "पशुधन पालन आम बात है और राज्य कृषि का एक अभिन्न अंग है जो ग्रामीण आबादी के",
-      },
-    },
-    {
-      image: avatar,
-      name: { english: "Person Name 2", hindi: "व्यक्ति का नाम 2" },
-      designation: { english: "Designation", hindi: "पद का नाम" },
-      description: {
-        english:
-          "Sed ut perspiciatis unde omnis iste natus error sit voluptatem",
-        hindi:
-          "पशुधन पालन आम बात है और राज्य कृषि का एक अभिन्न अंग है जो ग्रामीण आबादी के",
-      },
-    },
-    {
-      image: avatar,
-      name: { english: "Person Name 3", hindi: "व्यक्ति का नाम 3" },
-      designation: { english: "Designation", hindi: "पद का नाम" },
-      description: {
-        english:
-          "Sed ut perspiciatis unde omnis iste natus error sit voluptatem",
-        hindi:
-          "पशुधन पालन आम बात है और राज्य कृषि का एक अभिन्न अंग है जो ग्रामीण आबादी के",
-      },
-    },
-    {
-      image: avatar,
-      name: { english: "Person Name 4", hindi: "व्यक्ति का नाम 4" },
-      designation: { english: "Designation", hindi: "पद का नाम" },
-      description: {
-        english:
-          "Sed ut perspiciatis unde omnis iste natus error sit voluptatem",
-        hindi:
-          "पशुधन पालन आम बात है और राज्य कृषि का एक अभिन्न अंग है जो ग्रामीण आबादी के",
-      },
-    },
-  ];
-  const awardtexts = [
-    {
-      english:
-        "“It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages”",
-      hindi:
-        "“यह न केवल पांच शताब्दियों तक जीवित रहा है, बल्कि इलेक्ट्रॉनिक टाइपसेटिंग में भी छलांग लगाई है, तथा मूलतः अपरिवर्तित रहा है। 1960 के दशक में लोरेम इप्सुम अंशों वाले लेट्रासेट शीटों के जारी होने के साथ इसे लोकप्रिय बनाया गया”",
-    },
-    {
-      english:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
-      hindi:
-        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर रिचर्ड मैक्लिंटॉक ने लोरेम इप्सम मार्ग से अधिक अस्पष्ट लैटिन शब्दों में से एक को देखा, और शास्त्रीय साहित्य में शब्द के उद्धरणों के माध्यम से निर्विवाद स्रोत की खोज की। लोरेम इप्सम सिसरो के 'डी फिनिबस बोनोरम एट मालोरम' (द एक्सट्रीम ऑफ गुड एंड एविल) से लिया गया है, जिसे 45 ईसा पूर्व में लिखा गया था। यह पुस्तक पुनर्जागरण के दौरान नैतिकता के सिद्धांत पर एक लोकप्रिय ग्रंथ है। की पहली पंक्ति, खंड की एक पंक्ति से आती है। रुचि रखने वालों के लिए",
-    },
-  ];
-
-  const awardCard = {
-    image: null,
-    award_venue: {
-      english: "Award name & venue",
-      hindi: "पुरस्कार का नाम एवं स्थान",
-    },
-    date: { english: "dd-mm-yyyy", hindi: "dd-mm-yyyy" },
-    description: {
-      english:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-      hindi:
-        "लोरेम इप्सम केवल यादृच्छिक पाठ नहीं है, लोकप्रिय धारणा के विपरीत है। शास्त्रीय लैटिन साहित्य में इसकी उत्पत्ति का पता 45 ईसा पूर्व में लगाया जा सकता है, जिससे यह 2000 वर्ष से अधिक पुराना हो गया है। वर्जीनिया में हैम्पडेन-सिडनी कॉलेज के एक लैटिन प्रोफेसर",
-    },
-  };
   const slides = [homeBanner1, homeBanner1, homeBanner1];
   const slideProperties = {
     duration: 1500,
@@ -184,47 +79,35 @@ export default function Home() {
   ];
   const { language } = useContext(LanguageContext);
   const [awardCards, setAwardCards] = useState([
-    { ...awardCard, image: personality1Image },
-    { ...awardCard, image: personality2Image },
-    { ...awardCard, image: personality3Image },
-    { ...awardCard, image: personality4Image },
-    { ...awardCard, image: personality5Image },
-    { ...awardCard, image: personality6Image },
-    { ...awardCard, image: personality7Image },
-    { ...awardCard, image: personality8Image },
-    { ...awardCard, image: personality9Image },
+    awardCard1,
+    awardCard2,
+    awardCard3,
+    awardCard4,
+    awardCard5,
+    awardCard6,
+    awardCard7,
+    awardCard8,
+    awardCard9,
   ]);
   useEffect(() => {
     const updateAwardCards = () => {
       const isSmallScree = window.innerWidth < 1024;
       const updatedSlides = isSmallScree
         ? [
-            { ...awardCard, image: personality1Image },
-            { ...awardCard, image: personality2Image },
-            { ...awardCard, image: personality3Image },
-            { ...awardCard, image: personality4Image },
-            { ...awardCard, image: personality5Image },
-            { ...awardCard, image: personality6Image },
-            { ...awardCard, image: personality7Image },
-            { ...awardCard, image: personality8Image },
-            { ...awardCard, image: personality9Image },
+            awardCard1,
+            awardCard2,
+            awardCard3,
+            awardCard4,
+            awardCard5,
+            awardCard6,
+            awardCard7,
+            awardCard8,
+            awardCard9,
           ]
         : [
-            [
-              { ...awardCard, image: personality1Image },
-              { ...awardCard, image: personality2Image },
-              { ...awardCard, image: personality3Image },
-            ],
-            [
-              { ...awardCard, image: personality4Image },
-              { ...awardCard, image: personality5Image },
-              { ...awardCard, image: personality6Image },
-            ],
-            [
-              { ...awardCard, image: personality7Image },
-              { ...awardCard, image: personality8Image },
-              { ...awardCard, image: personality9Image },
-            ],
+            [awardCard1, awardCard2, awardCard3],
+            [awardCard4, awardCard5, awardCard6],
+            [awardCard7, awardCard8, awardCard9],
           ];
       setAwardCards(updatedSlides);
     };
@@ -241,6 +124,16 @@ export default function Home() {
 
   //     return () => clearInterval(interval);
   //   }, []);
+
+  const [
+    { benefit1Expanded, benefit2Expanded, benefit3Expanded, benefit4Expanded },
+    setBenefitsExpansion,
+  ] = useState({
+    benefit1Expanded: false,
+    benefit2Expanded: false,
+    benefit3Expanded: false,
+    benefit4Expanded: false,
+  });
   return (
     <div>
       <section className="relative">
@@ -464,6 +357,153 @@ export default function Home() {
             ))}
           </Slide>
         </div>
+      </section>
+
+      <section className="p-6 my-4  min-[800px]:px-20">
+        <div className="flex items-center gap-4 m-auto w-fit p-4">
+          <img src={leafsDesign} alt="leafs-design" className="h-10  md:h-14" />
+          <h2 className="gradient-border-center text-2xl  lg:text-5xl font-light bg-white pt-2 pb-4">
+            {language === "hindi"
+              ? "ग्राम पंचायत के लाभ"
+              : "Benefits of Gram Panchayat"}
+          </h2>
+          <img src={leafsDesign} alt="leafs-design" className="h-10  md:h-14" />
+        </div>
+
+        <Fragment>
+          <div
+            className={`${
+              benefit1Expanded ? "h-auto" : "h-[30px]"
+            } overflow-hidden`}
+          >
+            <p className="text-2xl font-semibold">{benefit1.title[language]}</p>
+            {benefit1.texts.map((text, index) => (
+              <p key={index}>
+                <span className="font-medium">{text.point[language]}</span>
+                <span>{text.details[language]}</span>
+              </p>
+            ))}
+          </div>
+          <button
+            onClick={() =>
+              setBenefitsExpansion((prev) => ({
+                ...prev,
+                benefit1Expanded: !prev.benefit1Expanded,
+              }))
+            }
+            className="text-blue-500"
+          >
+            {benefit1Expanded
+              ? language === "hindi"
+                ? "कम पढ़ें"
+                : "Read less"
+              : language === "hindi"
+              ? "और पढ़ें"
+              : "Ream more..."}
+          </button>
+        </Fragment>
+
+        <Fragment>
+          <div
+            className={`${
+              benefit2Expanded ? "h-auto" : "h-[30px]"
+            } overflow-hidden`}
+          >
+            <p className="text-2xl font-semibold">{benefit2.title[language]}</p>
+            <p>{benefit2.details[language]}</p>
+            {benefit2.texts.map((text, index) => (
+              <p key={index}>
+                <span className="font-medium">{text.point[language]}</span>
+                <span>{text.details[language]}</span>
+              </p>
+            ))}
+            <p>{benefit2.footer[language]}</p>
+          </div>
+
+          <button
+            onClick={() =>
+              setBenefitsExpansion((prev) => ({
+                ...prev,
+                benefit2Expanded: !prev.benefit2Expanded,
+              }))
+            }
+            className="text-blue-500"
+          >
+            {benefit2Expanded
+              ? language === "hindi"
+                ? "कम पढ़ें"
+                : "Read less"
+              : language === "hindi"
+              ? "और पढ़ें"
+              : "Ream more..."}
+          </button>
+        </Fragment>
+
+        <Fragment>
+          <div
+            className={`${
+              benefit3Expanded ? "h-auto" : "h-[30px]"
+            } overflow-hidden`}
+          >
+            <p className="text-2xl font-semibold">{benefit3.title[language]}</p>
+            <p>{benefit3.details[language]}</p>
+            {benefit3.texts.map((text, index) => (
+              <p key={index}>
+                <span className="font-medium">{text.point[language]}</span>
+                <span>{text.details[language]}</span>
+              </p>
+            ))}
+            <p>{benefit3.footer[language]}</p>
+          </div>
+          <button
+            onClick={() =>
+              setBenefitsExpansion((prev) => ({
+                ...prev,
+                benefit3Expanded: !prev.benefit3Expanded,
+              }))
+            }
+            className="text-blue-500"
+          >
+            {benefit3Expanded
+              ? language === "hindi"
+                ? "कम पढ़ें"
+                : "Read less"
+              : language === "hindi"
+              ? "और पढ़ें"
+              : "Ream more..."}
+          </button>
+        </Fragment>
+
+        <Fragment>
+          <div
+            className={`${
+              benefit4Expanded ? "h-auto" : "h-[30px]"
+            } overflow-hidden`}
+          >
+            <p className="text-2xl font-semibold">{benefit4.title[language]}</p>
+            <p>{benefit4.details[language]}</p>
+            {benefit4.texts.map((text, index) => (
+              <p key={index}>{text[language]}</p>
+            ))}
+          </div>
+          <button
+            onClick={() =>
+              setBenefitsExpansion((prev) => ({
+                ...prev,
+                benefit4Expanded: !prev.benefit4Expanded,
+              }))
+            }
+            className="text-blue-500"
+          >
+            {benefit4Expanded
+              ? language === "hindi"
+                ? "कम पढ़ें"
+                : "Read less"
+              : language === "hindi"
+              ? "और पढ़ें"
+              : "Ream more..."}
+          </button>
+        </Fragment>
       </section>
       <NavLink to="/download-pariwar-nakal">
         <button className="fixed -mt-4  bottom-8 right-5 z-10  p-3 px-5 bg-black text-white rounded-2xl">
