@@ -1,6 +1,8 @@
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
-import homeBanner1 from "../assets/Images/home/home-banner-1.png";
+import slide1 from "../assets/Images/home/slide-1.png";
+import slide2 from "../assets/Images/home/slide-2.png";
+import slide3 from "../assets/Images/home/slide-3.png";
 import whiteCorner from "../assets/Images/home/white-corner.svg";
 import leafsDesign from "../assets/icons/leafs-design.svg";
 import avatar from "../assets/Images/home/dummy-avatar.svg";
@@ -31,7 +33,7 @@ import {
   benefit4,
 } from "../assets/data/home_data";
 export default function Home() {
-  const slides = [homeBanner1, homeBanner1, homeBanner1];
+  const slides = [slide1, slide2, slide3];
   const slideProperties = {
     duration: 1500,
     autoplay: true,
